@@ -1,0 +1,90 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: SoundStat
+providerId: soundstat
+created: '2026-07-03'
+modified: '2026-07-03'
+reconciled: false
+tags:
+- Music
+- Audio Analysis
+- Audio Features
+- Recommendations
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of SoundStat spend. SoundStat bills on a prepaid, usage-based model:
+  you add funds to a balance via Stripe and are charged per unique track analyzed,
+  with the per-track rate stepping down across volume bands (EUR 0.01 down to EUR
+  0.005 per track). Registration and three recommendation endpoints (similar,
+  feature-target, mixed) are free, and re-reading an already-analyzed track incurs
+  no new charge - so the dominant cost driver is the count of first-time unique
+  track analyses per month. Balance top-ups are non-refundable.
+notes: >-
+  Per-track EUR rates are taken from the SoundStat terms page and are not
+  reconciled here; verify current pricing before budgeting. The single most
+  important optimization lever is deduplicating track IDs so you never pay twice
+  to analyze the same track.
+sources:
+- https://soundstat.info/
+- https://soundstat.info/terms.html
+- https://soundstat.info/api/v1/docs
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: SoundStat
+serviceCategory: Analytics and Media Intelligence
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Prepaid
+  billingCurrency: EUR
+  chargeCategories:
+  - Usage
+  - Purchase
+focusColumns:
+  ServiceName: SoundStat API
+  ServiceCategory: Analytics and Media Intelligence
+  ProviderName: SoundStat
+  PublisherName: SoundStat
+  InvoiceIssuerName: SoundStat
+  BillingCurrency: EUR
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: unique_track_analysis
+  description: First-time analysis of a unique track, billed per track at a volume-banded EUR rate.
+  unit: tracks
+  aggregation: sum
+  dimensions:
+  - account
+  - volume_band
+- name: balance_topup
+  description: Prepaid funds added to the account balance via Stripe (non-refundable).
+  unit: currency
+  aggregation: sum
+  dimensions:
+  - account
+- name: free_recommendation_calls
+  description: Calls to the free recommendation endpoints (similar, feature-target, mixed); no charge.
+  unit: requests
+  aggregation: sum
+  dimensions:
+  - account
+principles:
+- name: Visibility
+  description: Track the count of unique first-time track analyses per month and the volume band you land in; monitor prepaid balance burn-down.
+- name: Allocation
+  description: Attribute unique-track analysis charges to the product or playlist workflow that requested them via API-key or account segmentation.
+- name: Optimization
+  description: Deduplicate track IDs before calling analysis so already-analyzed tracks are read for free; batch to reach lower per-track volume bands; lean on the free recommendation endpoints where possible.
+- name: Accountability
+  description: Set a prepaid-balance ceiling per period and review unique-analysis volume against it; because top-ups are non-refundable, budget conservatively.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

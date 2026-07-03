@@ -1,0 +1,60 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: SoundStat
+providerId: soundstat
+created: '2026-07-03'
+modified: '2026-07-03'
+reconciled: false
+tags:
+- Music
+- Audio Analysis
+- Audio Features
+- Rate Limiting
+- Quotas
+description: >-
+  SoundStat does not publish fixed numeric per-minute or per-second rate limits
+  for its REST API. The terms of service state that SoundStat reserves the right
+  to restrict access when usage limits are exceeded, but specific thresholds are
+  not documented. In practice the primary governor on consumption is economic
+  rather than a request-rate cap: unique track analysis is billed against a
+  prepaid balance, so throughput is bounded by available funds and by the per-track
+  volume bands. Repeated reads of already-analyzed tracks and the free
+  recommendation endpoints are served without incurring analysis charges.
+notes: >-
+  No documented numeric request-rate limit exists as of the review date. Treat the
+  usage terms as the binding constraint and design clients to back off on 429 (and
+  other 4xx/5xx) responses. Confirm any account-level throttles with SoundStat
+  during reconciliation.
+sources:
+- https://soundstat.info/terms.html
+- https://soundstat.info/api/v1/docs
+- https://soundstat.info/
+responseCodes:
+  throttled: 429
+limits:
+- name: REST API Requests
+  scope: account
+  metric: requests
+  limit: not published
+  notes: No fixed numeric per-minute or per-second request-rate limit is documented.
+- name: Unique Track Analysis
+  scope: account
+  metric: tracks
+  limit: prepaid balance / volume bands
+  notes: Analysis of a not-yet-seen track is billed per unique track; throughput is bounded by prepaid funds, not a request cap.
+- name: Free Recommendation Endpoints
+  scope: account
+  metric: requests
+  limit: subject to fair-use restriction
+  notes: Similar, feature-target, and mixed recommendation endpoints are free; SoundStat may restrict access if usage limits are exceeded.
+policies:
+- name: Usage-Based Restriction
+  description: SoundStat reserves the right to restrict access when usage limits are exceeded, per its terms of service.
+- name: Analysis Caching
+  description: Once a track is analyzed it is served from the corpus on subsequent requests without re-charging, reducing effective load and cost.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After on 429 responses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

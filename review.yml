@@ -1,0 +1,100 @@
+aid: soundstat
+name: SoundStat
+review:
+  question: Does SoundStat expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-03'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. SoundStat's public surface is a
+    request/response REST API served under https://soundstat.info/api/v1 and
+    described by an OpenAPI 3.1 document at
+    https://soundstat.info/api/v1/openapi.json. The one non-classic-request
+    endpoint - GET /api/v1/track/{track_id}/status - is a Server-Sent Events
+    (SSE) stream over HTTP used to report analysis progress for a track that is
+    still being processed. SSE is a one-way, server-to-client stream over the
+    same HTTP transport, not a bidirectional WebSocket (ws:// or wss://). No
+    WebSocket endpoint is documented anywhere in the SoundStat OpenAPI spec or
+    on the site, so there is no server-push WebSocket transport to model with
+    AsyncAPI.
+findings:
+  summary: |
+    SoundStat does not publish a documented public WebSocket API. SoundStat is an
+    independent music audio-analysis service (an alternative to Spotify's
+    deprecated audio-features and recommendations endpoints) that exposes a REST
+    API at base https://soundstat.info/api/v1, authenticated with an x-api-key
+    header. The API is described by a machine-readable OpenAPI 3.1 document
+    (https://soundstat.info/api/v1/openapi.json) with 20 documented operations:
+    track analysis, an SSE analysis-status stream, genre/feature search, genres
+    and stats reads, and fifteen recommendation strategies. All 20 are plain HTTP
+    request/response, except the status endpoint which is HTTP Server-Sent
+    Events - still not a WebSocket. No ws:// or wss:// endpoint is documented.
+  openSource: |
+    SoundStat itself is a hosted, closed-source commercial service; no official
+    open-source SDK or server implementation was found (the similarly named
+    GitHub projects "SoundStats" and "SoundStat-soft" are unrelated third-party
+    tools). The API is fully described by a public OpenAPI 3.1 spec, which this
+    entry mirrors.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://soundstat.info/api/v1
+      documented: true
+      note: All track, search, genres, stats, and recommendation operations are request/response REST over HTTPS.
+    - protocol: SSE
+      scheme: https
+      baseURL: https://soundstat.info/api/v1/track/{track_id}/status
+      documented: true
+      note: Server-Sent Events stream of analysis progress for a track still being processed. One-way HTTP server push, not a WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in the SoundStat OpenAPI spec or on the website as of the review date.
+  endpointsConfirmedRest:
+    - GET    https://soundstat.info/api/v1/track/{track_id}
+    - GET    https://soundstat.info/api/v1/track/{track_id}/status
+    - POST   https://soundstat.info/api/v1/tracks/search
+    - GET    https://soundstat.info/api/v1/genres
+    - GET    https://soundstat.info/api/v1/stats
+    - GET    https://soundstat.info/api/v1/recommendations/similar
+    - POST   https://soundstat.info/api/v1/recommendations/by-features
+    - POST   https://soundstat.info/api/v1/recommendations/mixed
+    - POST   https://soundstat.info/api/v1/recommendations/progression
+    - POST   https://soundstat.info/api/v1/recommendations/compatible
+    - POST   https://soundstat.info/api/v1/recommendations/contrast
+    - POST   https://soundstat.info/api/v1/recommendations/cross-genre
+    - POST   https://soundstat.info/api/v1/recommendations/time-of-day
+    - POST   https://soundstat.info/api/v1/recommendations/hidden-gems
+    - POST   https://soundstat.info/api/v1/recommendations/beat-structure
+    - POST   https://soundstat.info/api/v1/recommendations/duration
+    - POST   https://soundstat.info/api/v1/recommendations/mood
+    - POST   https://soundstat.info/api/v1/recommendations/activity
+    - POST   https://soundstat.info/api/v1/recommendations/instrumental
+    - POST   https://soundstat.info/api/v1/recommendations/acoustic
+  endpointsModeled: []
+sources:
+  - url: https://soundstat.info/api/v1/docs
+    type: Documentation
+    note: Swagger UI for the SoundStat REST API.
+  - url: https://soundstat.info/api/v1/openapi.json
+    type: OpenAPI
+    note: Machine-readable OpenAPI 3.1 spec with all 20 operations and schemas; x-api-key header auth. No WebSocket.
+  - url: https://soundstat.info/
+    type: Website
+    note: Positions SoundStat as an audio-analysis alternative to Spotify's deprecated audio-features API; reports millions of tracks analyzed.
+  - url: https://soundstat.info/terms.html
+    type: TermsOfService
+    note: Per-unique-track pricing bands (EUR), Stripe prepaid balance, usage-based restriction clause. No rate-limit numbers.
+  - url: https://soundstat.info/article/New-Horizons-in-Music-Recommendations.html
+    type: Documentation
+    note: Describes the recommendation endpoints, including the three free ones.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists. SoundStat's public API is
+    request/response REST plus a one-way HTTP Server-Sent Events status stream,
+    both fully captured by the provider's OpenAPI 3.1 document. No AsyncAPI
+    document was created because there is no bidirectional or server-push
+    WebSocket transport on SoundStat's API to model.

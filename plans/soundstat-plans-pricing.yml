@@ -1,0 +1,141 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: SoundStat
+providerId: soundstat
+created: '2026-07-03'
+modified: '2026-07-03'
+reconciled: false
+tags:
+- Music
+- Audio Analysis
+- Audio Features
+- Recommendations
+- Plans
+description: >-
+  SoundStat uses a single prepaid, usage-based pricing model rather than fixed
+  monthly subscription tiers. Registration is free and yields an API key. Three
+  recommendation endpoints - similar tracks, feature-target, and mixed multi-seed
+  - are documented as callable for free. Billing applies to unique track analysis:
+  you pay only the first time a given track is analyzed, and the per-track price
+  drops as your monthly analyzed-track volume increases. Funds are added to a
+  prepaid balance via Stripe and are non-refundable. The price points below are
+  taken from the SoundStat terms page and are denominated in euros; verify current
+  rates during reconciliation.
+notes: >-
+  Prices are per unique track analyzed per month, in EUR, and step down by volume
+  band. Already-analyzed tracks are served from the corpus without re-charging.
+  Confirm live pricing, the exact set of free endpoints, and any registration
+  quota at soundstat.info before relying on these figures.
+sources:
+- https://soundstat.info/
+- https://soundstat.info/terms.html
+- https://soundstat.info/api/v1/docs
+- https://soundstat.info/article/New-Horizons-in-Music-Recommendations.html
+plans:
+- id: soundstat-free
+  name: Free (Registration + Free Endpoints)
+  type: free
+  description: >-
+    Free account created on registration. Grants an API key and unrestricted
+    access to three recommendation endpoints - similar tracks, feature-target,
+    and mixed multi-seed - as well as the genres and stats reads. No charge is
+    incurred until a unique (not-yet-analyzed) track is requested.
+  entries:
+  - label: Free Recommendation Calls
+    name: free_recommendation_calls
+    type: usage
+    metric: requests
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free (similar, by-features, and mixed recommendation endpoints)
+    userMultiplied: false
+  elements:
+  - name: API Key on Registration
+  - name: Similar / Feature-Target / Mixed Recommendations
+  - name: Genres and Stats Reads
+- id: soundstat-usage-tier-1
+  name: Usage - up to 5,000 tracks/month
+  type: usage
+  description: >-
+    Prepaid, pay-as-you-go analysis for the first volume band. Charged per unique
+    track analyzed within the month.
+  entries:
+  - label: Unique Track Analysis
+    name: track_analysis_tier1
+    type: usage
+    metric: tracks
+    limit: 5000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: EUR 0.01 per unique track (up to 5,000/month)
+    userMultiplied: false
+  elements:
+  - name: Full Audio Features
+  - name: All Recommendation Endpoints
+  - name: Search and Filtering
+- id: soundstat-usage-tier-2
+  name: Usage - 5,000 to 15,000 tracks/month
+  type: usage
+  description: >-
+    Reduced per-track rate once monthly analyzed-track volume exceeds 5,000.
+  entries:
+  - label: Unique Track Analysis
+    name: track_analysis_tier2
+    type: usage
+    metric: tracks
+    limit: 15000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: EUR 0.0075 per unique track (5,000-15,000/month)
+    userMultiplied: false
+  elements:
+  - name: Full Audio Features
+  - name: All Recommendation Endpoints
+- id: soundstat-usage-tier-3
+  name: Usage - 15,000 to 30,000 tracks/month
+  type: usage
+  description: >-
+    Further reduced per-track rate for the 15,000-30,000 monthly volume band.
+  entries:
+  - label: Unique Track Analysis
+    name: track_analysis_tier3
+    type: usage
+    metric: tracks
+    limit: 30000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: EUR 0.006 per unique track (15,000-30,000/month)
+    userMultiplied: false
+  elements:
+  - name: Full Audio Features
+  - name: All Recommendation Endpoints
+- id: soundstat-usage-tier-4
+  name: Usage - over 30,000 tracks/month
+  type: usage
+  description: >-
+    Lowest published per-track rate for high-volume analysis above 30,000 tracks
+    per month.
+  entries:
+  - label: Unique Track Analysis
+    name: track_analysis_tier4
+    type: usage
+    metric: tracks
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: EUR 0.005 per unique track (over 30,000/month)
+    userMultiplied: false
+  elements:
+  - name: Full Audio Features
+  - name: All Recommendation Endpoints
+  - name: High-Volume Analysis
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
