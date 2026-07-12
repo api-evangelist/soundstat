@@ -1,0 +1,17 @@
+generated: '2026-07-11'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: soundstat.info
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug  9 03:21:55 2026 GMT
+  hsts: false
+domains:
+- domain: soundstat.info
+  dnssec: false
+  caa:
+  - 0 issuewild "letsencrypt.org"
+  spf: true
+  dmarc: true
+  dmarc_policy: none

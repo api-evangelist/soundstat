@@ -103,6 +103,10 @@ apis:
     returning ranked tracks with a genre filter and result limit. The similar,
     feature-target, and mixed endpoints are documented as free to call.
 common:
+- type: DomainSecurity
+  url: security/soundstat-domain-security.yml
+- type: Authentication
+  url: authentication/soundstat-authentication.yml
 - type: Website
   url: https://soundstat.info
 - type: Documentation
