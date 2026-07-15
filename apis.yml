@@ -103,6 +103,8 @@ apis:
     returning ranked tracks with a genre filter and result limit. The similar,
     feature-target, and mixed endpoints are documented as free to call.
 common:
+- type: AgenticAccess
+  url: agentic-access/soundstat-agentic-access.yml
 - type: DomainSecurity
   url: security/soundstat-domain-security.yml
 - type: Authentication
