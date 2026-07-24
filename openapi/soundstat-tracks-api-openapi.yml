@@ -1,0 +1,240 @@
+openapi: 3.1.0
+info:
+  title: SoundStat Genres Tracks API
+  description: API for accessing music track audio analysis, features (tempo, key, mode, energy, danceability, valence, instrumentalness, acousticness, loudness), search, and recommendations. SoundStat is an independent audio-analysis alternative to the deprecated Spotify audio-features endpoints.
+  version: 1.0.0
+servers:
+- url: https://soundstat.info
+  description: SoundStat production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Tracks
+paths:
+  /api/v1/tracks/search:
+    post:
+      summary: Search Tracks
+      description: "Search for analyzed tracks with filtering options.\n\nParameters:\n----------\n<b>x_api_key</b> : str (API key for authentication)<br>\n<b>genre</b> : str, optional (Filter by specific genre)<br>\n<b>limit</b> : int, default=50 (Maximum number of results, max 100)<br>\n<b>offset</b> : int, default=0 (Number of results to skip)<br>\n<b>filters</b> : AnalysisFilters, optional (Audio feature filters)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of matching track IDs<br>\n\nNotes:\n-----\nSupports pagination and complex audio feature filtering."
+      operationId: search_tracks_api_v1_tracks_search_post
+      parameters:
+      - name: genre
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/AnalysisFilters'
+              - type: 'null'
+              title: Filters
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Tracks
+components:
+  schemas:
+    AnalysisFilters:
+      properties:
+        tempo_min:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Tempo Min
+        tempo_max:
+          anyOf:
+          - type: number
+            maximum: 300.0
+          - type: 'null'
+          title: Tempo Max
+        energy_min:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Energy Min
+        energy_max:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Energy Max
+        danceability_min:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Danceability Min
+        danceability_max:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Danceability Max
+        valence_min:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Valence Min
+        valence_max:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Valence Max
+        instrumentalness_min:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Instrumentalness Min
+        instrumentalness_max:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Instrumentalness Max
+        acousticness_min:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Acousticness Min
+        acousticness_max:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Acousticness Max
+        popularity_min:
+          anyOf:
+          - type: integer
+            maximum: 100.0
+            minimum: 0.0
+          - type: 'null'
+          title: Popularity Min
+        popularity_max:
+          anyOf:
+          - type: integer
+            maximum: 100.0
+            minimum: 0.0
+          - type: 'null'
+          title: Popularity Max
+        key:
+          anyOf:
+          - type: integer
+            maximum: 11.0
+            minimum: 0.0
+          - type: 'null'
+          title: Key
+        mode:
+          anyOf:
+          - type: integer
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Mode
+      type: object
+      title: AnalysisFilters
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TrackIDList:
+      properties:
+        track_ids:
+          items:
+            type: string
+          type: array
+          title: Track Ids
+      type: object
+      required:
+      - track_ids
+      title: TrackIDList
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key issued after registration at https://soundstat.info/auth.html. Passed in the x-api-key request header.

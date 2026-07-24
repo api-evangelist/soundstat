@@ -1,0 +1,82 @@
+openapi: 3.1.0
+info:
+  title: SoundStat Genres API
+  description: API for accessing music track audio analysis, features (tempo, key, mode, energy, danceability, valence, instrumentalness, acousticness, loudness), search, and recommendations. SoundStat is an independent audio-analysis alternative to the deprecated Spotify audio-features endpoints.
+  version: 1.0.0
+servers:
+- url: https://soundstat.info
+  description: SoundStat production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Genres
+paths:
+  /api/v1/genres:
+    get:
+      summary: Get Available Genres
+      description: "Get list of all available genres in the database.\n\nParameters:\n----------\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nDict<br>\n    genres: List[str] (List of unique genre names)<br>\n\nNotes:\n-----\nOnly returns genres that have at least one analyzed track."
+      operationId: get_available_genres_api_v1_genres_get
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Genres
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key issued after registration at https://soundstat.info/auth.html. Passed in the x-api-key request header.

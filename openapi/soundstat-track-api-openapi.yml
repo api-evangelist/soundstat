@@ -1,0 +1,237 @@
+openapi: 3.1.0
+info:
+  title: SoundStat Genres Track API
+  description: API for accessing music track audio analysis, features (tempo, key, mode, energy, danceability, valence, instrumentalness, acousticness, loudness), search, and recommendations. SoundStat is an independent audio-analysis alternative to the deprecated Spotify audio-features endpoints.
+  version: 1.0.0
+servers:
+- url: https://soundstat.info
+  description: SoundStat production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Track
+paths:
+  /api/v1/track/{track_id}:
+    get:
+      summary: Get Track Analysis
+      description: "Get detailed audio analysis for a specific track.\n\nParameters:\n----------\n<b>track_id</b> : str (Spotify track ID)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackAnalysis<br>\n    Basic track info (name, artists, genre)<br>\n    Track duration in milliseconds<br>\n    Audio features (tempo, key, mode, energy etc.)<br>\n\n\nNotes:\n-----\nIf track hasn't been analyzed, initiates analysis and returns processing status."
+      operationId: get_track_analysis_api_v1_track__track_id__get
+      parameters:
+      - name: track_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Track Id
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackAnalysis'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Track
+  /api/v1/track/{track_id}/status:
+    get:
+      summary: Track Status Updates
+      description: "Get real-time status updates for track analysis via Server-Sent Events (SSE).\n\nParameters:\n----------\n<b>track_id</b> : str (Spotify track ID)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nEventSourceResponse<br>\n    Status updates as SSE events<br>\n    Event types: status, complete, error<br>\n\nNotes:\n-----\nMaintains an active connection until analysis is complete or fails."
+      operationId: track_status_updates_api_v1_track__track_id__status_get
+      parameters:
+      - name: track_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Track Id
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Track
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AudioFeatures:
+      properties:
+        tempo:
+          type: number
+          title: Tempo
+          description: Track tempo in BPM
+        key:
+          type: integer
+          title: Key
+          description: Track key (0-11)
+        mode:
+          type: integer
+          title: Mode
+          description: Mode (0 - minor, 1 - major)
+        key_confidence:
+          type: number
+          title: Key Confidence
+          description: Key detection confidence (0-1)
+        energy:
+          type: number
+          title: Energy
+          description: Energy level (0-1)
+        danceability:
+          type: number
+          title: Danceability
+          description: Danceability score (0-1)
+        valence:
+          type: number
+          title: Valence
+          description: Mood/positiveness (0-1)
+        instrumentalness:
+          type: number
+          title: Instrumentalness
+          description: Instrumentalness score (0-1)
+        acousticness:
+          type: number
+          title: Acousticness
+          description: Acousticness score (0-1)
+        loudness:
+          type: number
+          title: Loudness
+          description: Loudness level (0-1)
+        segments:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Segments
+          description: Segment analysis data
+        beats:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Beats
+          description: Beat analysis data
+      type: object
+      required:
+      - tempo
+      - key
+      - mode
+      - key_confidence
+      - energy
+      - danceability
+      - valence
+      - instrumentalness
+      - acousticness
+      - loudness
+      title: AudioFeatures
+      description: Public audio features response model
+    TrackAnalysis:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Spotify track ID
+        name:
+          type: string
+          title: Name
+          description: Track name
+        artists:
+          items:
+            type: string
+          type: array
+          title: Artists
+          description: List of artists
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Track genre
+        popularity:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Popularity
+          description: Popularity score (0-100)
+        duration_ms:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Ms
+          description: Track duration in milliseconds
+        features:
+          anyOf:
+          - $ref: '#/components/schemas/AudioFeatures'
+          - type: 'null'
+          description: Audio features analysis
+      type: object
+      required:
+      - id
+      - name
+      - artists
+      title: TrackAnalysis
+      description: Public track analysis response model
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key issued after registration at https://soundstat.info/auth.html. Passed in the x-api-key request header.
