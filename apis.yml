@@ -12,7 +12,20 @@ description: SoundStat is an independent audio analysis API that returns detaile
   activity, time-of-day, cross-genre, DJ-compatible, contrast, hidden-gems, and
   more) plus genre-and-feature search on top of its analysis corpus. The REST API
   is authenticated with an x-api-key header and billed per unique track analyzed.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/soundstat.png
 tags:
 - Music
 - Audio Analysis
@@ -24,84 +37,106 @@ created: '2026-07-03'
 modified: '2026-07-03'
 specificationVersion: '0.19'
 apis:
-- aid: soundstat:soundstat-track-analysis-api
-  name: SoundStat Track Analysis API
-  tags:
-  - Track Analysis
-  - Audio Features
-  - Tempo
-  - Key
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+- aid: soundstat:soundstat-genres-api
+  name: SoundStat Genres API
+  description: The Genres API from SoundStat — 1 operation(s) for genres.
   humanURL: https://soundstat.info/api/v1/docs
   baseURL: https://soundstat.info/api/v1
-  properties:
-  - url: https://soundstat.info/api/v1/docs
-    type: Documentation
-  - url: https://soundstat.info/api/v1/docs
-    type: APIReference
-  - url: openapi/soundstat-openapi.yml
-    type: OpenAPI
-  - url: collections/soundstat.postman_collection.json
-    type: PostmanCollection
-  - url: collections/soundstat.opencollection.json
-    type: OpenCollection
-  description: Retrieve the full audio analysis for a track by its Spotify track ID -
-    tempo, key, mode, key confidence, energy, danceability, valence, instrumentalness,
-    acousticness, loudness, and segment/beat structure - alongside track metadata
-    (name, artists, genre, popularity, duration). Includes a per-track analysis
-    status endpoint (Server-Sent Events over HTTP) for tracks still being processed.
-- aid: soundstat:soundstat-search-discovery-api
-  name: SoundStat Search & Discovery API
   tags:
-  - Search
-  - Discovery
   - Genres
-  - Statistics
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://soundstat.info/api/v1/docs
-  baseURL: https://soundstat.info/api/v1
   properties:
-  - url: https://soundstat.info/api/v1/docs
-    type: Documentation
-  - url: https://soundstat.info/api/v1/docs
-    type: APIReference
-  - url: openapi/soundstat-openapi.yml
-    type: OpenAPI
-  - url: collections/soundstat.postman_collection.json
-    type: PostmanCollection
-  - url: collections/soundstat.opencollection.json
-    type: OpenCollection
-  description: Search the analyzed track corpus by genre with pagination, filter on
-    audio-feature ranges (tempo, energy, danceability, valence, instrumentalness,
-    acousticness, popularity, key, mode), list the available genres, and read
-    corpus-wide analysis statistics such as the total number of tracks analyzed.
+  - type: OpenAPI
+    url: openapi/soundstat-genres-api-openapi.yml
+  - type: Documentation
+    url: https://soundstat.info/api/v1/docs
+  - type: APIReference
+    url: https://soundstat.info/api/v1/docs
+  - type: PostmanCollection
+    url: collections/soundstat.postman_collection.json
+  - type: OpenCollection
+    url: collections/soundstat.opencollection.json
+  - type: Documentation
+    url: https://soundstat.info/article/New-Horizons-in-Music-Recommendations.html
 - aid: soundstat:soundstat-recommendations-api
   name: SoundStat Recommendations API
-  tags:
-  - Recommendations
-  - Similarity
-  - Mood
-  - Playlisting
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  description: The Recommendations API from SoundStat — 15 operation(s) for recommendations.
   humanURL: https://soundstat.info/api/v1/docs
   baseURL: https://soundstat.info/api/v1
+  tags:
+  - Recommendations
   properties:
-  - url: https://soundstat.info/article/New-Horizons-in-Music-Recommendations.html
-    type: Documentation
-  - url: https://soundstat.info/api/v1/docs
-    type: APIReference
-  - url: openapi/soundstat-openapi.yml
-    type: OpenAPI
-  - url: collections/soundstat.postman_collection.json
-    type: PostmanCollection
-  - url: collections/soundstat.opencollection.json
-    type: OpenCollection
-  description: A recommendation engine built on the analysis corpus, exposing fifteen
-    strategies - similar tracks, feature-target, mixed multi-seed, harmonic
-    progression, DJ-compatible, contrast, cross-genre, time-of-day, hidden gems,
-    beat-structure, duration, mood, activity, instrumental, and acoustic - each
-    returning ranked tracks with a genre filter and result limit. The similar,
-    feature-target, and mixed endpoints are documented as free to call.
+  - type: OpenAPI
+    url: openapi/soundstat-recommendations-api-openapi.yml
+  - type: Documentation
+    url: https://soundstat.info/api/v1/docs
+  - type: APIReference
+    url: https://soundstat.info/api/v1/docs
+  - type: PostmanCollection
+    url: collections/soundstat.postman_collection.json
+  - type: OpenCollection
+    url: collections/soundstat.opencollection.json
+  - type: Documentation
+    url: https://soundstat.info/article/New-Horizons-in-Music-Recommendations.html
+- aid: soundstat:soundstat-stats-api
+  name: SoundStat Stats API
+  description: The Stats API from SoundStat — 1 operation(s) for stats.
+  humanURL: https://soundstat.info/api/v1/docs
+  baseURL: https://soundstat.info/api/v1
+  tags:
+  - Stats
+  properties:
+  - type: OpenAPI
+    url: openapi/soundstat-stats-api-openapi.yml
+  - type: Documentation
+    url: https://soundstat.info/api/v1/docs
+  - type: APIReference
+    url: https://soundstat.info/api/v1/docs
+  - type: PostmanCollection
+    url: collections/soundstat.postman_collection.json
+  - type: OpenCollection
+    url: collections/soundstat.opencollection.json
+  - type: Documentation
+    url: https://soundstat.info/article/New-Horizons-in-Music-Recommendations.html
+- aid: soundstat:soundstat-track-api
+  name: SoundStat Track API
+  description: The Track API from SoundStat — 2 operation(s) for track.
+  humanURL: https://soundstat.info/api/v1/docs
+  baseURL: https://soundstat.info/api/v1
+  tags:
+  - Track
+  properties:
+  - type: OpenAPI
+    url: openapi/soundstat-track-api-openapi.yml
+  - type: Documentation
+    url: https://soundstat.info/api/v1/docs
+  - type: APIReference
+    url: https://soundstat.info/api/v1/docs
+  - type: PostmanCollection
+    url: collections/soundstat.postman_collection.json
+  - type: OpenCollection
+    url: collections/soundstat.opencollection.json
+  - type: Documentation
+    url: https://soundstat.info/article/New-Horizons-in-Music-Recommendations.html
+- aid: soundstat:soundstat-tracks-api
+  name: SoundStat Tracks API
+  description: The Tracks API from SoundStat — 1 operation(s) for tracks.
+  humanURL: https://soundstat.info/api/v1/docs
+  baseURL: https://soundstat.info/api/v1
+  tags:
+  - Tracks
+  properties:
+  - type: OpenAPI
+    url: openapi/soundstat-tracks-api-openapi.yml
+  - type: Documentation
+    url: https://soundstat.info/api/v1/docs
+  - type: APIReference
+    url: https://soundstat.info/api/v1/docs
+  - type: PostmanCollection
+    url: collections/soundstat.postman_collection.json
+  - type: OpenCollection
+    url: collections/soundstat.opencollection.json
+  - type: Documentation
+    url: https://soundstat.info/article/New-Horizons-in-Music-Recommendations.html
 common:
 - type: AgenticAccess
   url: agentic-access/soundstat-agentic-access.yml
