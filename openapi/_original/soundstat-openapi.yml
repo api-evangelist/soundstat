@@ -1,0 +1,1424 @@
+openapi: 3.1.0
+info:
+  title: SoundStat API
+  description: API for accessing music track audio analysis, features (tempo, key, mode, energy, danceability,
+    valence, instrumentalness, acousticness, loudness), search, and recommendations. SoundStat is an independent
+    audio-analysis alternative to the deprecated Spotify audio-features endpoints.
+  version: 1.0.0
+paths:
+  /api/v1/track/{track_id}:
+    get:
+      summary: Get Track Analysis
+      description: "Get detailed audio analysis for a specific track.\n\nParameters:\n----------\n<b>track_id</b>\
+        \ : str (Spotify track ID)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n\
+        -------\nTrackAnalysis<br>\n    Basic track info (name, artists, genre)<br>\n    Track duration\
+        \ in milliseconds<br>\n    Audio features (tempo, key, mode, energy etc.)<br>\n\n\nNotes:\n-----\n\
+        If track hasn't been analyzed, initiates analysis and returns processing status."
+      operationId: get_track_analysis_api_v1_track__track_id__get
+      parameters:
+      - name: track_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Track Id
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackAnalysis'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/track/{track_id}/status:
+    get:
+      summary: Track Status Updates
+      description: "Get real-time status updates for track analysis via Server-Sent Events (SSE).\n\n\
+        Parameters:\n----------\n<b>track_id</b> : str (Spotify track ID)<br>\n<b>x_api_key</b> : str\
+        \ (API key for authentication)<br>\n\nReturns:\n-------\nEventSourceResponse<br>\n    Status updates\
+        \ as SSE events<br>\n    Event types: status, complete, error<br>\n\nNotes:\n-----\nMaintains\
+        \ an active connection until analysis is complete or fails."
+      operationId: track_status_updates_api_v1_track__track_id__status_get
+      parameters:
+      - name: track_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Track Id
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/tracks/search:
+    post:
+      summary: Search Tracks
+      description: "Search for analyzed tracks with filtering options.\n\nParameters:\n----------\n<b>x_api_key</b>\
+        \ : str (API key for authentication)<br>\n<b>genre</b> : str, optional (Filter by specific genre)<br>\n\
+        <b>limit</b> : int, default=50 (Maximum number of results, max 100)<br>\n<b>offset</b> : int,\
+        \ default=0 (Number of results to skip)<br>\n<b>filters</b> : AnalysisFilters, optional (Audio\
+        \ feature filters)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of matching track IDs<br>\n\
+        \nNotes:\n-----\nSupports pagination and complex audio feature filtering."
+      operationId: search_tracks_api_v1_tracks_search_post
+      parameters:
+      - name: genre
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/AnalysisFilters'
+              - type: 'null'
+              title: Filters
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/genres:
+    get:
+      summary: Get Available Genres
+      description: "Get list of all available genres in the database.\n\nParameters:\n----------\n<b>x_api_key</b>\
+        \ : str (API key for authentication)<br>\n\nReturns:\n-------\nDict<br>\n    genres: List[str]\
+        \ (List of unique genre names)<br>\n\nNotes:\n-----\nOnly returns genres that have at least one\
+        \ analyzed track."
+      operationId: get_available_genres_api_v1_genres_get
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/similar:
+    get:
+      summary: Get Similar Tracks
+      description: "Get track recommendations based on a seed track.\n\nParameters:\n----------\n<b>seed_track_id</b>\
+        \ : str (Spotify ID of the reference track)<br>\n<b>limit</b> : int, default=20 (Number of recommendations,\
+        \ max 100)<br>\n<b>min_popularity</b> : int, optional (Minimum popularity score 0-100)<br>\n<b>genre_match</b>\
+        \ : bool, default=False (Prioritize same genre)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\
+        \nReturns:\n-------\nTrackIDList<br>\n    List of recommended track IDs<br>\n\nNotes:\n-----\n\
+        Uses audio features to find tracks with similar characteristics."
+      operationId: get_similar_tracks_api_v1_recommendations_similar_get
+      parameters:
+      - name: seed_track_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Seed Track Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Limit
+      - name: min_popularity
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            maximum: 100
+            minimum: 0
+          - type: 'null'
+          title: Min Popularity
+      - name: genre_match
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Genre Match
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/by-features:
+    post:
+      summary: Get Recommendations By Features
+      description: "Get track recommendations matching specific audio features.\n\nParameters:\n----------\n\
+        <b>features</b> : TargetFeatures (Target audio characteristics)<br>\n    - tempo: float, optional\
+        \ (Target BPM, 0-300)<br>\n    - energy: float, optional (Target energy level, 0-1)<br>\n    -\
+        \ danceability: float, optional (Target danceability, 0-1)<br>\n    - duration_ms: int, optional\
+        \ (Target duration in ms, 30000-900000)<br>\n    - other audio features...<br>\n<b>x_api_key</b>\
+        \ : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of matching\
+        \ track IDs<br>\n\nNotes:\n-----\nFinds tracks that best match the specified audio characteristics."
+      operationId: get_recommendations_by_features_api_v1_recommendations_by_features_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TargetFeatures'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/mixed:
+    post:
+      summary: Get Mixed Recommendations
+      operationId: get_mixed_recommendations_api_v1_recommendations_mixed_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MixedRecommendationParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/stats:
+    get:
+      summary: Get Analysis Stats
+      description: "Get comprehensive statistics about analyzed tracks.\n\nParameters:\n----------\n<b>x_api_key</b>\
+        \ : str (API key for authentication)<br>\n\nReturns:\n-------\nDict<br>\n    general: Dict (Overall\
+        \ statistics)<br>\n        - total_tracks: int<br>\n        - analyzed_tracks: int<br>\n     \
+        \   - unique_genres: int<br>\n        - avg_popularity: float<br>\n    top_genres: List[Dict]\
+        \ (Most common genres)<br>\n    audio_characteristics: Dict (Average audio features)<br>\n\nNotes:\n\
+        -----\nProvides a statistical overview of the analyzed music database."
+      operationId: get_analysis_stats_api_v1_stats_get
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/progression:
+    post:
+      summary: Get Progression Recommendations
+      description: Get tracks with progressively changing audio characteristics.
+      operationId: get_progression_recommendations_api_v1_recommendations_progression_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProgressionParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/compatible:
+    post:
+      summary: Get Compatible Tracks
+      description: "Get tracks that are musically compatible with a reference track.\n\nParameters:\n\
+        ----------\n<b>params</b> : CompatibleParams<br>\n    - track_id: str (Reference track ID)<br>\n\
+        \    - compatibility_type: str, default=\"both\" (key, bpm, both)<br>\n    - limit: int, default=20\
+        \ (Number of recommendations)<br>\n    - min_popularity: int, optional (Minimum popularity score)<br>\n\
+        <b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n\
+        \    List of tracks compatible with the reference track<br>\n\nNotes:\n-----\nUseful for DJ mixing,\
+        \ creating smooth transitions, or harmonic playlists."
+      operationId: get_compatible_tracks_api_v1_recommendations_compatible_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompatibleParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/contrast:
+    post:
+      summary: Get Contrast Recommendations
+      description: "Get tracks with characteristics contrasting to a reference track.\n\nParameters:\n\
+        ----------\n<b>params</b> : ContrastParams<br>\n    - track_id: str (Reference track ID)<br>\n\
+        \    - contrast_features: List[str], default=[\"energy\", \"valence\"] (Features to contrast)<br>\n\
+        \    - limit: int, default=20 (Number of recommendations)<br>\n<b>x_api_key</b> : str (API key\
+        \ for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of tracks with contrasting\
+        \ characteristics<br>\n\nNotes:\n-----\nCreates variety in playlists by finding tracks with opposite\
+        \ characteristics."
+      operationId: get_contrast_recommendations_api_v1_recommendations_contrast_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContrastParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/cross-genre:
+    post:
+      summary: Get Cross Genre Recommendations
+      description: Get tracks from different genres with similar audio characteristics.
+      operationId: get_cross_genre_recommendations_api_v1_recommendations_cross_genre_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrossGenreParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/time-of-day:
+    post:
+      summary: Get Time Of Day Recommendations
+      description: "Get track recommendations suitable for a specific time of day.\n\nParameters:\n----------\n\
+        <b>params</b> : TimeOfDayParams<br>\n    - time: str (One of: morning, afternoon, evening, night)<br>\n\
+        \    - genre: str, optional (Specific genre filter)<br>\n    - limit: int, default=20 (Number\
+        \ of recommendations)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n\
+        -------\nTrackIDList<br>\n    List of recommended track IDs suitable for the time of day<br>\n\
+        \nNotes:\n-----\nDifferent times of day have different energy/mood profiles."
+      operationId: get_time_of_day_recommendations_api_v1_recommendations_time_of_day_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeOfDayParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/hidden-gems:
+    post:
+      summary: Get Hidden Gems Recommendations
+      description: Get recommendations for lesser-known tracks with high-quality audio features.
+      operationId: get_hidden_gems_recommendations_api_v1_recommendations_hidden_gems_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HiddenGemsParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/beat-structure:
+    post:
+      summary: Get Beat Structure Recommendations
+      description: "Get recommendations for tracks with specific beat structure characteristics.\n\nParameters:\n\
+        ----------\n<b>params</b> : BeatStructureParams<br>\n    - min_regularity: float, default=0.7\
+        \ (Minimum beat regularity score 0-1)<br>\n    - tempo_min: float, optional (Minimum tempo in\
+        \ BPM)<br>\n    - tempo_max: float, optional (Maximum tempo in BPM)<br>\n    - genre: str, optional\
+        \ (Specific genre filter)<br>\n    - limit: int, default=20 (Number of recommendations)<br>\n\
+        <b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n\
+        \    List of recommended track IDs matching beat structure criteria<br>\n\nNotes:\n-----\nUseful\
+        \ for finding tracks with consistent, predictable beat patterns."
+      operationId: get_beat_structure_recommendations_api_v1_recommendations_beat_structure_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeatStructureParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/duration:
+    post:
+      summary: Get Duration Recommendations
+      description: Get track recommendations based on specific duration requirements.
+      operationId: get_duration_recommendations_api_v1_recommendations_duration_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DurationParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/mood:
+    post:
+      summary: Get Mood Recommendations
+      description: Get track recommendations based on desired mood.
+      operationId: get_mood_recommendations_api_v1_recommendations_mood_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoodParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/activity:
+    post:
+      summary: Get Activity Recommendations
+      description: Get track recommendations suitable for specific activities.
+      operationId: get_activity_recommendations_api_v1_recommendations_activity_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/instrumental:
+    post:
+      summary: Get Instrumental Recommendations
+      description: Get recommendations for instrumental tracks.
+      operationId: get_instrumental_recommendations_api_v1_recommendations_instrumental_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstrumentalParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recommendations/acoustic:
+    post:
+      summary: Get Acoustic Recommendations
+      description: Get recommendations for acoustic tracks.
+      operationId: get_acoustic_recommendations_api_v1_recommendations_acoustic_post
+      parameters:
+      - name: x-api-key
+        in: header
+        required: false
+        schema:
+          type: string
+          title: X-Api-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcousticParams'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackIDList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AcousticParams:
+      properties:
+        min_acousticness:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Min Acousticness
+          description: Minimum acousticness score
+          default: 0.5
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      title: AcousticParams
+    ActivityParams:
+      properties:
+        activity:
+          type: string
+          title: Activity
+          description: 'Activity type: workout, study, sleep, party, focus'
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      required:
+      - activity
+      title: ActivityParams
+    AnalysisFilters:
+      properties:
+        tempo_min:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Tempo Min
+        tempo_max:
+          anyOf:
+          - type: number
+            maximum: 300.0
+          - type: 'null'
+          title: Tempo Max
+        energy_min:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Energy Min
+        energy_max:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Energy Max
+        danceability_min:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Danceability Min
+        danceability_max:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Danceability Max
+        valence_min:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Valence Min
+        valence_max:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Valence Max
+        instrumentalness_min:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Instrumentalness Min
+        instrumentalness_max:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Instrumentalness Max
+        acousticness_min:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Acousticness Min
+        acousticness_max:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Acousticness Max
+        popularity_min:
+          anyOf:
+          - type: integer
+            maximum: 100.0
+            minimum: 0.0
+          - type: 'null'
+          title: Popularity Min
+        popularity_max:
+          anyOf:
+          - type: integer
+            maximum: 100.0
+            minimum: 0.0
+          - type: 'null'
+          title: Popularity Max
+        key:
+          anyOf:
+          - type: integer
+            maximum: 11.0
+            minimum: 0.0
+          - type: 'null'
+          title: Key
+        mode:
+          anyOf:
+          - type: integer
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Mode
+      type: object
+      title: AnalysisFilters
+    AudioFeatures:
+      properties:
+        tempo:
+          type: number
+          title: Tempo
+          description: Track tempo in BPM
+        key:
+          type: integer
+          title: Key
+          description: Track key (0-11)
+        mode:
+          type: integer
+          title: Mode
+          description: Mode (0 - minor, 1 - major)
+        key_confidence:
+          type: number
+          title: Key Confidence
+          description: Key detection confidence (0-1)
+        energy:
+          type: number
+          title: Energy
+          description: Energy level (0-1)
+        danceability:
+          type: number
+          title: Danceability
+          description: Danceability score (0-1)
+        valence:
+          type: number
+          title: Valence
+          description: Mood/positiveness (0-1)
+        instrumentalness:
+          type: number
+          title: Instrumentalness
+          description: Instrumentalness score (0-1)
+        acousticness:
+          type: number
+          title: Acousticness
+          description: Acousticness score (0-1)
+        loudness:
+          type: number
+          title: Loudness
+          description: Loudness level (0-1)
+        segments:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Segments
+          description: Segment analysis data
+        beats:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Beats
+          description: Beat analysis data
+      type: object
+      required:
+      - tempo
+      - key
+      - mode
+      - key_confidence
+      - energy
+      - danceability
+      - valence
+      - instrumentalness
+      - acousticness
+      - loudness
+      title: AudioFeatures
+      description: Public audio features response model
+    BeatStructureParams:
+      properties:
+        min_regularity:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Min Regularity
+          description: Minimum beat regularity (0-1)
+          default: 0.7
+        tempo_min:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Tempo Min
+          description: Minimum tempo (BPM)
+        tempo_max:
+          anyOf:
+          - type: number
+            maximum: 300.0
+          - type: 'null'
+          title: Tempo Max
+          description: Maximum tempo (BPM)
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      title: BeatStructureParams
+    CompatibleParams:
+      properties:
+        track_id:
+          type: string
+          title: Track Id
+          description: Reference track ID
+        compatibility_type:
+          type: string
+          title: Compatibility Type
+          description: 'Type of compatibility: key, bpm, both'
+          default: both
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+        min_popularity:
+          anyOf:
+          - type: integer
+            maximum: 100.0
+            minimum: 0.0
+          - type: 'null'
+          title: Min Popularity
+          description: Minimum popularity score
+      type: object
+      required:
+      - track_id
+      title: CompatibleParams
+    ContrastParams:
+      properties:
+        track_id:
+          type: string
+          title: Track Id
+          description: Reference track ID
+        contrast_features:
+          items:
+            type: string
+          type: array
+          title: Contrast Features
+          description: Features to contrast
+          default:
+          - energy
+          - valence
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      required:
+      - track_id
+      title: ContrastParams
+    CrossGenreParams:
+      properties:
+        track_id:
+          type: string
+          title: Track Id
+          description: Reference track ID
+        exclude_genres:
+          items:
+            type: string
+          type: array
+          title: Exclude Genres
+          description: Genres to exclude
+          default: []
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      required:
+      - track_id
+      title: CrossGenreParams
+    DurationParams:
+      properties:
+        min_duration_ms:
+          type: integer
+          title: Min Duration Ms
+          description: Minimum track duration in milliseconds
+          default: 30000
+        max_duration_ms:
+          type: integer
+          title: Max Duration Ms
+          description: Maximum track duration in milliseconds
+          default: 600000
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      title: DurationParams
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HiddenGemsParams:
+      properties:
+        similar_to_track_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Similar To Track Id
+          description: Optional reference track
+        max_popularity:
+          type: integer
+          maximum: 70.0
+          minimum: 0.0
+          title: Max Popularity
+          description: Maximum popularity score (0-100)
+          default: 40
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      title: HiddenGemsParams
+    InstrumentalParams:
+      properties:
+        min_instrumentalness:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Min Instrumentalness
+          description: Minimum instrumentalness score
+          default: 0.5
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      title: InstrumentalParams
+    MixedRecommendationParams:
+      properties:
+        seed_tracks:
+          items:
+            type: string
+          type: array
+          maxItems: 5
+          minItems: 1
+          title: Seed Tracks
+        target_features:
+          anyOf:
+          - $ref: '#/components/schemas/TargetFeatures'
+          - type: 'null'
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          default: 20
+      type: object
+      required:
+      - seed_tracks
+      title: MixedRecommendationParams
+    MoodParams:
+      properties:
+        mood:
+          type: string
+          title: Mood
+          description: 'Target mood: happy, sad, energetic, relaxed, danceable'
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      required:
+      - mood
+      title: MoodParams
+    ProgressionParams:
+      properties:
+        parameter:
+          type: string
+          title: Parameter
+          description: Parameter to progress (energy, tempo, danceability, valence)
+        direction:
+          type: string
+          title: Direction
+          description: Progression direction (increase, decrease)
+        steps:
+          type: integer
+          maximum: 10.0
+          minimum: 2.0
+          title: Steps
+          description: Number of tracks in progression
+          default: 5
+        start_value:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Start Value
+          description: Starting value for parameter (0-1, or BPM for tempo)
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+      type: object
+      required:
+      - parameter
+      - direction
+      title: ProgressionParams
+    TargetFeatures:
+      properties:
+        tempo:
+          anyOf:
+          - type: number
+            maximum: 300.0
+            minimum: 0.0
+          - type: 'null'
+          title: Tempo
+        energy:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Energy
+        danceability:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Danceability
+        valence:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Valence
+        instrumentalness:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Instrumentalness
+        acousticness:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Acousticness
+        duration_ms:
+          anyOf:
+          - type: integer
+            maximum: 900000.0
+            minimum: 30000.0
+          - type: 'null'
+          title: Duration Ms
+          description: Target track duration in milliseconds (30s-15min)
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          default: 20
+      type: object
+      title: TargetFeatures
+    TimeOfDayParams:
+      properties:
+        time:
+          type: string
+          title: Time
+          description: 'Time of day: morning, afternoon, evening, night'
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      required:
+      - time
+      title: TimeOfDayParams
+    TrackAnalysis:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Spotify track ID
+        name:
+          type: string
+          title: Name
+          description: Track name
+        artists:
+          items:
+            type: string
+          type: array
+          title: Artists
+          description: List of artists
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Track genre
+        popularity:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Popularity
+          description: Popularity score (0-100)
+        duration_ms:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Ms
+          description: Track duration in milliseconds
+        features:
+          anyOf:
+          - $ref: '#/components/schemas/AudioFeatures'
+          - type: 'null'
+          description: Audio features analysis
+      type: object
+      required:
+      - id
+      - name
+      - artists
+      title: TrackAnalysis
+      description: Public track analysis response model
+    TrackIDList:
+      properties:
+        track_ids:
+          items:
+            type: string
+          type: array
+          title: Track Ids
+      type: object
+      required:
+      - track_ids
+      title: TrackIDList
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key issued after registration at https://soundstat.info/auth.html. Passed in the
+        x-api-key request header.
+servers:
+- url: https://soundstat.info
+  description: SoundStat production API
+security:
+- ApiKeyAuth: []

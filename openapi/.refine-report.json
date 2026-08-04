@@ -1,0 +1,22 @@
+{
+  "provider": "soundstat",
+  "sources": [
+    "soundstat-genres-api-openapi.yml",
+    "soundstat-recommendations-api-openapi.yml",
+    "soundstat-stats-api-openapi.yml",
+    "soundstat-track-api-openapi.yml",
+    "soundstat-tracks-api-openapi.yml"
+  ],
+  "outputs": [
+    "soundstat-genres-api-openapi.yml",
+    "soundstat-recommendations-api-openapi.yml",
+    "soundstat-stats-api-openapi.yml",
+    "soundstat-track-api-openapi.yml",
+    "soundstat-tracks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
