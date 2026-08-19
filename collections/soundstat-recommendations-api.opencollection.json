@@ -1,0 +1,359 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SoundStat Genres Recommendations API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Recommendations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Similar Tracks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://soundstat.info/api/v1/recommendations/similar",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "seed_track_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "min_popularity",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "genre_match",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get track recommendations based on a seed track.\n\nParameters:\n----------\n<b>seed_track_id</b> : str (Spotify ID of the reference track)<br>\n<b>limit</b> : int, default=20 (Number of recommendations, max 100)<br>\n<b>min_popularity</b> : int, optional (Minimum popularity score 0-100)<br>\n<b>genre_match</b> : bool, default=False (Prioritize same genre)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of recommended track IDs<br>\n\nNotes:\n-----\nUs"
+        },
+        {
+          "info": {
+            "name": "Get Recommendations By Features",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/by-features",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get track recommendations matching specific audio features.\n\nParameters:\n----------\n<b>features</b> : TargetFeatures (Target audio characteristics)<br>\n    - tempo: float, optional (Target BPM, 0-300)<br>\n    - energy: float, optional (Target energy level, 0-1)<br>\n    - danceability: float, optional (Target danceability, 0-1)<br>\n    - duration_ms: int, optional (Target duration in ms, 30000-900000)<br>\n    - other audio features...<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nR"
+        },
+        {
+          "info": {
+            "name": "Get Mixed Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/mixed",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get Mixed Recommendations"
+        },
+        {
+          "info": {
+            "name": "Get Progression Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/progression",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get tracks with progressively changing audio characteristics."
+        },
+        {
+          "info": {
+            "name": "Get Compatible Tracks",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/compatible",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get tracks that are musically compatible with a reference track.\n\nParameters:\n----------\n<b>params</b> : CompatibleParams<br>\n    - track_id: str (Reference track ID)<br>\n    - compatibility_type: str, default=\"both\" (key, bpm, both)<br>\n    - limit: int, default=20 (Number of recommendations)<br>\n    - min_popularity: int, optional (Minimum popularity score)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of tracks compatible with the refer"
+        },
+        {
+          "info": {
+            "name": "Get Contrast Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/contrast",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get tracks with characteristics contrasting to a reference track.\n\nParameters:\n----------\n<b>params</b> : ContrastParams<br>\n    - track_id: str (Reference track ID)<br>\n    - contrast_features: List[str], default=[\"energy\", \"valence\"] (Features to contrast)<br>\n    - limit: int, default=20 (Number of recommendations)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of tracks with contrasting characteristics<br>\n\nNotes:\n-----\nCreates variety "
+        },
+        {
+          "info": {
+            "name": "Get Cross Genre Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/cross-genre",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get tracks from different genres with similar audio characteristics."
+        },
+        {
+          "info": {
+            "name": "Get Time Of Day Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/time-of-day",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get track recommendations suitable for a specific time of day.\n\nParameters:\n----------\n<b>params</b> : TimeOfDayParams<br>\n    - time: str (One of: morning, afternoon, evening, night)<br>\n    - genre: str, optional (Specific genre filter)<br>\n    - limit: int, default=20 (Number of recommendations)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of recommended track IDs suitable for the time of day<br>\n\nNotes:\n-----\nDifferent times of day ha"
+        },
+        {
+          "info": {
+            "name": "Get Hidden Gems Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/hidden-gems",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get recommendations for lesser-known tracks with high-quality audio features."
+        },
+        {
+          "info": {
+            "name": "Get Beat Structure Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/beat-structure",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get recommendations for tracks with specific beat structure characteristics.\n\nParameters:\n----------\n<b>params</b> : BeatStructureParams<br>\n    - min_regularity: float, default=0.7 (Minimum beat regularity score 0-1)<br>\n    - tempo_min: float, optional (Minimum tempo in BPM)<br>\n    - tempo_max: float, optional (Maximum tempo in BPM)<br>\n    - genre: str, optional (Specific genre filter)<br>\n    - limit: int, default=20 (Number of recommendations)<br>\n<b>x_api_key</b> : str (API key for authen"
+        },
+        {
+          "info": {
+            "name": "Get Duration Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/duration",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get track recommendations based on specific duration requirements."
+        },
+        {
+          "info": {
+            "name": "Get Mood Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/mood",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get track recommendations based on desired mood."
+        },
+        {
+          "info": {
+            "name": "Get Activity Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/activity",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get track recommendations suitable for specific activities."
+        },
+        {
+          "info": {
+            "name": "Get Instrumental Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/instrumental",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get recommendations for instrumental tracks."
+        },
+        {
+          "info": {
+            "name": "Get Acoustic Recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/recommendations/acoustic",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get recommendations for acoustic tracks."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

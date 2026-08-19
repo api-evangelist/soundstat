@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SoundStat Genres Stats API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Stats",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Analysis Stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://soundstat.info/api/v1/stats",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get comprehensive statistics about analyzed tracks.\n\nParameters:\n----------\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nDict<br>\n    general: Dict (Overall statistics)<br>\n        - total_tracks: int<br>\n        - analyzed_tracks: int<br>\n        - unique_genres: int<br>\n        - avg_popularity: float<br>\n    top_genres: List[Dict] (Most common genres)<br>\n    audio_characteristics: Dict (Average audio features)<br>\n\nNotes:\n-----\nProvides a statistical overview of "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,268 @@
+{
+  "item": [
+    {
+      "id": "6eed4c01-d989-4907-b3ec-1b6c55e5c61f",
+      "name": "Tracks",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4ae4e885-b9ef-4ad2-84a5-2273adc13765",
+          "name": "Search Tracks",
+          "request": {
+            "name": "Search Tracks",
+            "description": {
+              "content": "Search for analyzed tracks with filtering options.\n\nParameters:\n----------\n<b>x_api_key</b> : str (API key for authentication)<br>\n<b>genre</b> : str, optional (Filter by specific genre)<br>\n<b>limit</b> : int, default=50 (Maximum number of results, max 100)<br>\n<b>offset</b> : int, default=0 (Number of results to skip)<br>\n<b>filters</b> : AnalysisFilters, optional (Audio feature filters)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of matching track IDs<br>\n\nNotes:\n-----\nSupports pagination and complex audio feature filtering.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tracks",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "genre",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "x-api-key",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tempo_min\": \"<number>\",\n  \"tempo_max\": \"<number>\",\n  \"energy_min\": \"<number>\",\n  \"energy_max\": \"<number>\",\n  \"danceability_min\": \"<number>\",\n  \"danceability_max\": \"<number>\",\n  \"valence_min\": \"<number>\",\n  \"valence_max\": \"<number>\",\n  \"instrumentalness_min\": \"<number>\",\n  \"instrumentalness_max\": \"<number>\",\n  \"acousticness_min\": \"<number>\",\n  \"acousticness_max\": \"<number>\",\n  \"popularity_min\": \"<integer>\",\n  \"popularity_max\": \"<integer>\",\n  \"key\": \"<integer>\",\n  \"mode\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2743b543-966e-4f33-b264-61fb8636615e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tracks",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "genre",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "x-api-key",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tempo_min\": 2981.844071058547,\n  \"tempo_max\": 245.39552484086616,\n  \"energy_min\": 0.22553101359682481,\n  \"energy_max\": 0.11470668003379458,\n  \"danceability_min\": 0.7883181651580706,\n  \"danceability_max\": 0.004278780073647903,\n  \"valence_min\": 0.5480939913281685,\n  \"valence_max\": 0.9088955216714665,\n  \"instrumentalness_min\": 0.7796894620201977,\n  \"instrumentalness_max\": 0.9039578039408641,\n  \"acousticness_min\": 0.08808836178476631,\n  \"acousticness_max\": 0.7770647798855991,\n  \"popularity_min\": 9,\n  \"popularity_max\": 65,\n  \"key\": 9,\n  \"mode\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"track_ids\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "02b465cd-6b8e-42cd-898e-2ca069f9976f",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tracks",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "genre",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "x-api-key",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tempo_min\": 2981.844071058547,\n  \"tempo_max\": 245.39552484086616,\n  \"energy_min\": 0.22553101359682481,\n  \"energy_max\": 0.11470668003379458,\n  \"danceability_min\": 0.7883181651580706,\n  \"danceability_max\": 0.004278780073647903,\n  \"valence_min\": 0.5480939913281685,\n  \"valence_max\": 0.9088955216714665,\n  \"instrumentalness_min\": 0.7796894620201977,\n  \"instrumentalness_max\": 0.9039578039408641,\n  \"acousticness_min\": 0.08808836178476631,\n  \"acousticness_max\": 0.7770647798855991,\n  \"popularity_min\": 9,\n  \"popularity_max\": 65,\n  \"key\": 9,\n  \"mode\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://soundstat.info",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "980f7c5d-bb1f-48e9-8948-e7141c9348c9",
+    "name": "SoundStat Genres Tracks API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "API for accessing music track audio analysis, features (tempo, key, mode, energy, danceability, valence, instrumentalness, acousticness, loudness), search, and recommendations. SoundStat is an independent audio-analysis alternative to the deprecated Spotify audio-features endpoints.",
+      "type": "text/plain"
+    }
+  }
+}

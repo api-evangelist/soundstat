@@ -1,0 +1,64 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SoundStat Genres Tracks API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tracks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search Tracks",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://soundstat.info/api/v1/tracks/search",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "genre",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search for analyzed tracks with filtering options.\n\nParameters:\n----------\n<b>x_api_key</b> : str (API key for authentication)<br>\n<b>genre</b> : str, optional (Filter by specific genre)<br>\n<b>limit</b> : int, default=50 (Maximum number of results, max 100)<br>\n<b>offset</b> : int, default=0 (Number of results to skip)<br>\n<b>filters</b> : AnalysisFilters, optional (Audio feature filters)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of matching track IDs<br>\n\nNotes:\n-----\nSupports pagination "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

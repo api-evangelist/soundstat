@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SoundStat Genres Track API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Track",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Track Analysis",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://soundstat.info/api/v1/track/:track_id",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "track_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get detailed audio analysis for a specific track.\n\nParameters:\n----------\n<b>track_id</b> : str (Spotify track ID)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackAnalysis<br>\n    Basic track info (name, artists, genre)<br>\n    Track duration in milliseconds<br>\n    Audio features (tempo, key, mode, energy etc.)<br>\n\n\nNotes:\n-----\nIf track hasn't been analyzed, initiates analysis and returns processing status."
+        },
+        {
+          "info": {
+            "name": "Track Status Updates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://soundstat.info/api/v1/track/:track_id/status",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "track_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get real-time status updates for track analysis via Server-Sent Events (SSE).\n\nParameters:\n----------\n<b>track_id</b> : str (Spotify track ID)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nEventSourceResponse<br>\n    Status updates as SSE events<br>\n    Event types: status, complete, error<br>\n\nNotes:\n-----\nMaintains an active connection until analysis is complete or fails."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
