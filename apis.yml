@@ -12,6 +12,18 @@ description: SoundStat is an independent audio analysis API that returns detaile
   activity, time-of-day, cross-genre, DJ-compatible, contrast, hidden-gems, and
   more) plus genre-and-feature search on top of its analysis corpus. The REST API
   is authenticated with an x-api-key header and billed per unique track analyzed.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
