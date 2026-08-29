@@ -150,6 +150,9 @@ apis:
   - type: Documentation
     url: https://soundstat.info/article/New-Horizons-in-Music-Recommendations.html
 common:
+- type: CapabilityMap
+  url: capabilities/soundstat-capability-edges.yml
+  name: SoundStat Business Capability Map
 - type: AgenticAccess
   url: agentic-access/soundstat-agentic-access.yml
 - type: DomainSecurity

@@ -1,0 +1,25 @@
+slug: soundstat
+provider: SoundStat
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Media, Entertainment & Telecom Content
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Recommendations
+  spec_file: soundstat-recommendations-api-openapi.yml
+  capability_id: BC-3770.40
+  capability_id_l1: BC-3770
+  capability_name: Content Recommendation Modelling
+  confidence: 0.82
+  evidence: GET /api/v1/recommendations/similar Get Similar Tracks; POST /api/v1/recommendations/mood
+    get_mood_recommendations; POST /api/v1/recommendations/by-features Get Recommendations By Features
+  reason: The surface composes personalised content recommendations from audio-feature models (mood, similarity,
+    contrast, cross-genre), which is content recommendation modelling for consumer surfaces.
