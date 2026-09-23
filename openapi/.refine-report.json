@@ -1,11 +1,7 @@
 {
   "provider": "soundstat",
   "sources": [
-    "soundstat-genres-api-openapi.yml",
-    "soundstat-recommendations-api-openapi.yml",
-    "soundstat-stats-api-openapi.yml",
-    "soundstat-track-api-openapi.yml",
-    "soundstat-tracks-api-openapi.yml"
+    "_original/soundstat-openapi.yml"
   ],
   "outputs": [
     "soundstat-genres-api-openapi.yml",
@@ -17,6 +13,41 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "soundstat-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "soundstat-openapi.yml: tagged paths GET /api/v1/track/{track_id} -> Track",
+    "soundstat-openapi.yml: tagged paths GET /api/v1/track/{track_id}/status -> Track",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/tracks/search -> Tracks",
+    "soundstat-openapi.yml: tagged paths GET /api/v1/genres -> Genres",
+    "soundstat-openapi.yml: tagged paths GET /api/v1/recommendations/similar -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/by-features -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/mixed -> Recommendations",
+    "soundstat-openapi.yml: tagged paths GET /api/v1/stats -> Stats",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/progression -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/compatible -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/contrast -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/cross-genre -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/time-of-day -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/hidden-gems -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/beat-structure -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/duration -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/mood -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/activity -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/instrumental -> Recommendations",
+    "soundstat-openapi.yml: tagged paths POST /api/v1/recommendations/acoustic -> Recommendations",
+    "soundstat-openapi.yml: declared missing tag: Genres",
+    "soundstat-openapi.yml: declared missing tag: Recommendations",
+    "soundstat-openapi.yml: declared missing tag: Stats",
+    "soundstat-openapi.yml: declared missing tag: Track",
+    "soundstat-openapi.yml: declared missing tag: Tracks",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "soundstat-genres-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "soundstat-recommendations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "soundstat-stats-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "soundstat-track-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "soundstat-tracks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

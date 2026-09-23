@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: SoundStat Genres Stats API
+  title: SoundStat Stats API
   description: API for accessing music track audio analysis, features (tempo, key, mode, energy, danceability, valence, instrumentalness, acousticness, loudness), search, and recommendations. SoundStat is an independent audio-analysis alternative to the deprecated Spotify audio-features endpoints.
   version: 1.0.0
 servers:
@@ -14,7 +14,49 @@ paths:
   /api/v1/stats:
     get:
       summary: Get Analysis Stats
-      description: "Get comprehensive statistics about analyzed tracks.\n\nParameters:\n----------\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nDict<br>\n    general: Dict (Overall statistics)<br>\n        - total_tracks: int<br>\n        - analyzed_tracks: int<br>\n        - unique_genres: int<br>\n        - avg_popularity: float<br>\n    top_genres: List[Dict] (Most common genres)<br>\n    audio_characteristics: Dict (Average audio features)<br>\n\nNotes:\n-----\nProvides a statistical overview of the analyzed music database."
+      description: 'Get comprehensive statistics about analyzed tracks.
+
+
+        Parameters:
+
+        ----------
+
+        x_api_key : str (API key for authentication)
+
+
+        Returns:
+
+        -------
+
+        Dict
+
+
+        general: Dict (Overall statistics)
+
+
+        - total_tracks: int
+
+
+        - analyzed_tracks: int
+
+
+        - unique_genres: int
+
+
+        - avg_popularity: float
+
+
+        top_genres: List[Dict] (Most common genres)
+
+
+        audio_characteristics: Dict (Average audio features)
+
+
+        Notes:
+
+        -----
+
+        Provides a statistical overview of the analyzed music database.'
       operationId: get_analysis_stats_api_v1_stats_get
       parameters:
       - name: x-api-key

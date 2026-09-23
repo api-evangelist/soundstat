@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: SoundStat Genres Recommendations API
+  title: SoundStat Recommendations API
   description: API for accessing music track audio analysis, features (tempo, key, mode, energy, danceability, valence, instrumentalness, acousticness, loudness), search, and recommendations. SoundStat is an independent audio-analysis alternative to the deprecated Spotify audio-features endpoints.
   version: 1.0.0
 servers:
@@ -14,7 +14,43 @@ paths:
   /api/v1/recommendations/similar:
     get:
       summary: Get Similar Tracks
-      description: "Get track recommendations based on a seed track.\n\nParameters:\n----------\n<b>seed_track_id</b> : str (Spotify ID of the reference track)<br>\n<b>limit</b> : int, default=20 (Number of recommendations, max 100)<br>\n<b>min_popularity</b> : int, optional (Minimum popularity score 0-100)<br>\n<b>genre_match</b> : bool, default=False (Prioritize same genre)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of recommended track IDs<br>\n\nNotes:\n-----\nUses audio features to find tracks with similar characteristics."
+      description: 'Get track recommendations based on a seed track.
+
+
+        Parameters:
+
+        ----------
+
+        seed_track_id : str (Spotify ID of the reference track)
+
+
+        limit : int, default=20 (Number of recommendations, max 100)
+
+
+        min_popularity : int, optional (Minimum popularity score 0-100)
+
+
+        genre_match : bool, default=False (Prioritize same genre)
+
+
+        x_api_key : str (API key for authentication)
+
+
+        Returns:
+
+        -------
+
+        TrackIDList
+
+
+        List of recommended track IDs
+
+
+        Notes:
+
+        -----
+
+        Uses audio features to find tracks with similar characteristics.'
       operationId: get_similar_tracks_api_v1_recommendations_similar_get
       parameters:
       - name: seed_track_id
@@ -73,7 +109,49 @@ paths:
   /api/v1/recommendations/by-features:
     post:
       summary: Get Recommendations By Features
-      description: "Get track recommendations matching specific audio features.\n\nParameters:\n----------\n<b>features</b> : TargetFeatures (Target audio characteristics)<br>\n    - tempo: float, optional (Target BPM, 0-300)<br>\n    - energy: float, optional (Target energy level, 0-1)<br>\n    - danceability: float, optional (Target danceability, 0-1)<br>\n    - duration_ms: int, optional (Target duration in ms, 30000-900000)<br>\n    - other audio features...<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of matching track IDs<br>\n\nNotes:\n-----\nFinds tracks that best match the specified audio characteristics."
+      description: 'Get track recommendations matching specific audio features.
+
+
+        Parameters:
+
+        ----------
+
+        features : TargetFeatures (Target audio characteristics)
+
+
+        - tempo: float, optional (Target BPM, 0-300)
+
+
+        - energy: float, optional (Target energy level, 0-1)
+
+
+        - danceability: float, optional (Target danceability, 0-1)
+
+
+        - duration_ms: int, optional (Target duration in ms, 30000-900000)
+
+
+        - other audio features...
+
+
+        x_api_key : str (API key for authentication)
+
+
+        Returns:
+
+        -------
+
+        TrackIDList
+
+
+        List of matching track IDs
+
+
+        Notes:
+
+        -----
+
+        Finds tracks that best match the specified audio characteristics.'
       operationId: get_recommendations_by_features_api_v1_recommendations_by_features_post
       parameters:
       - name: x-api-key
@@ -171,7 +249,46 @@ paths:
   /api/v1/recommendations/compatible:
     post:
       summary: Get Compatible Tracks
-      description: "Get tracks that are musically compatible with a reference track.\n\nParameters:\n----------\n<b>params</b> : CompatibleParams<br>\n    - track_id: str (Reference track ID)<br>\n    - compatibility_type: str, default=\"both\" (key, bpm, both)<br>\n    - limit: int, default=20 (Number of recommendations)<br>\n    - min_popularity: int, optional (Minimum popularity score)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of tracks compatible with the reference track<br>\n\nNotes:\n-----\nUseful for DJ mixing, creating smooth transitions, or harmonic playlists."
+      description: 'Get tracks that are musically compatible with a reference track.
+
+
+        Parameters:
+
+        ----------
+
+        params : CompatibleParams
+
+
+        - track_id: str (Reference track ID)
+
+
+        - compatibility_type: str, default="both" (key, bpm, both)
+
+
+        - limit: int, default=20 (Number of recommendations)
+
+
+        - min_popularity: int, optional (Minimum popularity score)
+
+
+        x_api_key : str (API key for authentication)
+
+
+        Returns:
+
+        -------
+
+        TrackIDList
+
+
+        List of tracks compatible with the reference track
+
+
+        Notes:
+
+        -----
+
+        Useful for DJ mixing, creating smooth transitions, or harmonic playlists.'
       operationId: get_compatible_tracks_api_v1_recommendations_compatible_post
       parameters:
       - name: x-api-key
@@ -204,7 +321,43 @@ paths:
   /api/v1/recommendations/contrast:
     post:
       summary: Get Contrast Recommendations
-      description: "Get tracks with characteristics contrasting to a reference track.\n\nParameters:\n----------\n<b>params</b> : ContrastParams<br>\n    - track_id: str (Reference track ID)<br>\n    - contrast_features: List[str], default=[\"energy\", \"valence\"] (Features to contrast)<br>\n    - limit: int, default=20 (Number of recommendations)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of tracks with contrasting characteristics<br>\n\nNotes:\n-----\nCreates variety in playlists by finding tracks with opposite characteristics."
+      description: 'Get tracks with characteristics contrasting to a reference track.
+
+
+        Parameters:
+
+        ----------
+
+        params : ContrastParams
+
+
+        - track_id: str (Reference track ID)
+
+
+        - contrast_features: List[str], default=["energy", "valence"] (Features to contrast)
+
+
+        - limit: int, default=20 (Number of recommendations)
+
+
+        x_api_key : str (API key for authentication)
+
+
+        Returns:
+
+        -------
+
+        TrackIDList
+
+
+        List of tracks with contrasting characteristics
+
+
+        Notes:
+
+        -----
+
+        Creates variety in playlists by finding tracks with opposite characteristics.'
       operationId: get_contrast_recommendations_api_v1_recommendations_contrast_post
       parameters:
       - name: x-api-key
@@ -270,7 +423,43 @@ paths:
   /api/v1/recommendations/time-of-day:
     post:
       summary: Get Time Of Day Recommendations
-      description: "Get track recommendations suitable for a specific time of day.\n\nParameters:\n----------\n<b>params</b> : TimeOfDayParams<br>\n    - time: str (One of: morning, afternoon, evening, night)<br>\n    - genre: str, optional (Specific genre filter)<br>\n    - limit: int, default=20 (Number of recommendations)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of recommended track IDs suitable for the time of day<br>\n\nNotes:\n-----\nDifferent times of day have different energy/mood profiles."
+      description: 'Get track recommendations suitable for a specific time of day.
+
+
+        Parameters:
+
+        ----------
+
+        params : TimeOfDayParams
+
+
+        - time: str (One of: morning, afternoon, evening, night)
+
+
+        - genre: str, optional (Specific genre filter)
+
+
+        - limit: int, default=20 (Number of recommendations)
+
+
+        x_api_key : str (API key for authentication)
+
+
+        Returns:
+
+        -------
+
+        TrackIDList
+
+
+        List of recommended track IDs suitable for the time of day
+
+
+        Notes:
+
+        -----
+
+        Different times of day have different energy/mood profiles.'
       operationId: get_time_of_day_recommendations_api_v1_recommendations_time_of_day_post
       parameters:
       - name: x-api-key
@@ -336,7 +525,49 @@ paths:
   /api/v1/recommendations/beat-structure:
     post:
       summary: Get Beat Structure Recommendations
-      description: "Get recommendations for tracks with specific beat structure characteristics.\n\nParameters:\n----------\n<b>params</b> : BeatStructureParams<br>\n    - min_regularity: float, default=0.7 (Minimum beat regularity score 0-1)<br>\n    - tempo_min: float, optional (Minimum tempo in BPM)<br>\n    - tempo_max: float, optional (Maximum tempo in BPM)<br>\n    - genre: str, optional (Specific genre filter)<br>\n    - limit: int, default=20 (Number of recommendations)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackIDList<br>\n    List of recommended track IDs matching beat structure criteria<br>\n\nNotes:\n-----\nUseful for finding tracks with consistent, predictable beat patterns."
+      description: 'Get recommendations for tracks with specific beat structure characteristics.
+
+
+        Parameters:
+
+        ----------
+
+        params : BeatStructureParams
+
+
+        - min_regularity: float, default=0.7 (Minimum beat regularity score 0-1)
+
+
+        - tempo_min: float, optional (Minimum tempo in BPM)
+
+
+        - tempo_max: float, optional (Maximum tempo in BPM)
+
+
+        - genre: str, optional (Specific genre filter)
+
+
+        - limit: int, default=20 (Number of recommendations)
+
+
+        x_api_key : str (API key for authentication)
+
+
+        Returns:
+
+        -------
+
+        TrackIDList
+
+
+        List of recommended track IDs matching beat structure criteria
+
+
+        Notes:
+
+        -----
+
+        Useful for finding tracks with consistent, predictable beat patterns.'
       operationId: get_beat_structure_recommendations_api_v1_recommendations_beat_structure_post
       parameters:
       - name: x-api-key
@@ -533,6 +764,178 @@ paths:
       - Recommendations
 components:
   schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InstrumentalParams:
+      properties:
+        min_instrumentalness:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Min Instrumentalness
+          description: Minimum instrumentalness score
+          default: 0.5
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      title: InstrumentalParams
+    MoodParams:
+      properties:
+        mood:
+          type: string
+          title: Mood
+          description: 'Target mood: happy, sad, energetic, relaxed, danceable'
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      required:
+      - mood
+      title: MoodParams
+    TrackIDList:
+      properties:
+        track_ids:
+          items:
+            type: string
+          type: array
+          title: Track Ids
+      type: object
+      required:
+      - track_ids
+      title: TrackIDList
+    TargetFeatures:
+      properties:
+        tempo:
+          anyOf:
+          - type: number
+            maximum: 300.0
+            minimum: 0.0
+          - type: 'null'
+          title: Tempo
+        energy:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Energy
+        danceability:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Danceability
+        valence:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Valence
+        instrumentalness:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Instrumentalness
+        acousticness:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Acousticness
+        duration_ms:
+          anyOf:
+          - type: integer
+            maximum: 900000.0
+            minimum: 30000.0
+          - type: 'null'
+          title: Duration Ms
+          description: Target track duration in milliseconds (30s-15min)
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          default: 20
+      type: object
+      title: TargetFeatures
+    ActivityParams:
+      properties:
+        activity:
+          type: string
+          title: Activity
+          description: 'Activity type: workout, study, sleep, party, focus'
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      required:
+      - activity
+      title: ActivityParams
     DurationParams:
       properties:
         min_duration_ms:
@@ -560,38 +963,21 @@ components:
           default: 20
       type: object
       title: DurationParams
-    ContrastParams:
+    HTTPValidationError:
       properties:
-        track_id:
-          type: string
-          title: Track Id
-          description: Reference track ID
-        contrast_features:
+        detail:
           items:
-            type: string
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Contrast Features
-          description: Features to contrast
-          default:
-          - energy
-          - valence
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
+          title: Detail
       type: object
-      required:
-      - track_id
-      title: ContrastParams
-    MoodParams:
+      title: HTTPValidationError
+    TimeOfDayParams:
       properties:
-        mood:
+        time:
           type: string
-          title: Mood
-          description: 'Target mood: happy, sad, energetic, relaxed, danceable'
+          title: Time
+          description: 'Time of day: morning, afternoon, evening, night'
         genre:
           anyOf:
           - type: string
@@ -607,38 +993,8 @@ components:
           default: 20
       type: object
       required:
-      - mood
-      title: MoodParams
-    CompatibleParams:
-      properties:
-        track_id:
-          type: string
-          title: Track Id
-          description: Reference track ID
-        compatibility_type:
-          type: string
-          title: Compatibility Type
-          description: 'Type of compatibility: key, bpm, both'
-          default: both
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-        min_popularity:
-          anyOf:
-          - type: integer
-            maximum: 100.0
-            minimum: 0.0
-          - type: 'null'
-          title: Min Popularity
-          description: Minimum popularity score
-      type: object
-      required:
-      - track_id
-      title: CompatibleParams
+      - time
+      title: TimeOfDayParams
     BeatStructureParams:
       properties:
         min_regularity:
@@ -735,21 +1091,19 @@ components:
           default: 20
       type: object
       title: AcousticParams
-    InstrumentalParams:
+    CrossGenreParams:
       properties:
-        min_instrumentalness:
-          type: number
-          maximum: 1.0
-          minimum: 0.0
-          title: Min Instrumentalness
-          description: Minimum instrumentalness score
-          default: 0.5
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
-          description: Optional genre filter
+        track_id:
+          type: string
+          title: Track Id
+          description: Reference track ID
+        exclude_genres:
+          items:
+            type: string
+          type: array
+          title: Exclude Genres
+          description: Genres to exclude
+          default: []
         limit:
           type: integer
           maximum: 100.0
@@ -758,107 +1112,65 @@ components:
           description: Number of recommendations
           default: 20
       type: object
-      title: InstrumentalParams
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    TargetFeatures:
+      - track_id
+      title: CrossGenreParams
+    ContrastParams:
       properties:
-        tempo:
-          anyOf:
-          - type: number
-            maximum: 300.0
-            minimum: 0.0
-          - type: 'null'
-          title: Tempo
-        energy:
-          anyOf:
-          - type: number
-            maximum: 1.0
-            minimum: 0.0
-          - type: 'null'
-          title: Energy
-        danceability:
-          anyOf:
-          - type: number
-            maximum: 1.0
-            minimum: 0.0
-          - type: 'null'
-          title: Danceability
-        valence:
-          anyOf:
-          - type: number
-            maximum: 1.0
-            minimum: 0.0
-          - type: 'null'
-          title: Valence
-        instrumentalness:
-          anyOf:
-          - type: number
-            maximum: 1.0
-            minimum: 0.0
-          - type: 'null'
-          title: Instrumentalness
-        acousticness:
-          anyOf:
-          - type: number
-            maximum: 1.0
-            minimum: 0.0
-          - type: 'null'
-          title: Acousticness
-        duration_ms:
-          anyOf:
-          - type: integer
-            maximum: 900000.0
-            minimum: 30000.0
-          - type: 'null'
-          title: Duration Ms
-          description: Target track duration in milliseconds (30s-15min)
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
+        track_id:
+          type: string
+          title: Track Id
+          description: Reference track ID
+        contrast_features:
+          items:
+            type: string
+          type: array
+          title: Contrast Features
+          description: Features to contrast
+          default:
+          - energy
+          - valence
         limit:
           type: integer
           maximum: 100.0
           minimum: 1.0
           title: Limit
+          description: Number of recommendations
           default: 20
       type: object
-      title: TargetFeatures
+      required:
+      - track_id
+      title: ContrastParams
+    CompatibleParams:
+      properties:
+        track_id:
+          type: string
+          title: Track Id
+          description: Reference track ID
+        compatibility_type:
+          type: string
+          title: Compatibility Type
+          description: 'Type of compatibility: key, bpm, both'
+          default: both
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+        min_popularity:
+          anyOf:
+          - type: integer
+            maximum: 100.0
+            minimum: 0.0
+          - type: 'null'
+          title: Min Popularity
+          description: Minimum popularity score
+      type: object
+      required:
+      - track_id
+      title: CompatibleParams
     HiddenGemsParams:
       properties:
         similar_to_track_id:
@@ -889,87 +1201,6 @@ components:
           default: 20
       type: object
       title: HiddenGemsParams
-    TimeOfDayParams:
-      properties:
-        time:
-          type: string
-          title: Time
-          description: 'Time of day: morning, afternoon, evening, night'
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
-          description: Optional genre filter
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      required:
-      - time
-      title: TimeOfDayParams
-    CrossGenreParams:
-      properties:
-        track_id:
-          type: string
-          title: Track Id
-          description: Reference track ID
-        exclude_genres:
-          items:
-            type: string
-          type: array
-          title: Exclude Genres
-          description: Genres to exclude
-          default: []
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      required:
-      - track_id
-      title: CrossGenreParams
-    ActivityParams:
-      properties:
-        activity:
-          type: string
-          title: Activity
-          description: 'Activity type: workout, study, sleep, party, focus'
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
-          description: Optional genre filter
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      required:
-      - activity
-      title: ActivityParams
-    TrackIDList:
-      properties:
-        track_ids:
-          items:
-            type: string
-          type: array
-          title: Track Ids
-      type: object
-      required:
-      - track_ids
-      title: TrackIDList
     MixedRecommendationParams:
       properties:
         seed_tracks:

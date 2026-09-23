@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: SoundStat Genres Track API
+  title: SoundStat Track API
   description: API for accessing music track audio analysis, features (tempo, key, mode, energy, danceability, valence, instrumentalness, acousticness, loudness), search, and recommendations. SoundStat is an independent audio-analysis alternative to the deprecated Spotify audio-features endpoints.
   version: 1.0.0
 servers:
@@ -14,7 +14,40 @@ paths:
   /api/v1/track/{track_id}:
     get:
       summary: Get Track Analysis
-      description: "Get detailed audio analysis for a specific track.\n\nParameters:\n----------\n<b>track_id</b> : str (Spotify track ID)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nTrackAnalysis<br>\n    Basic track info (name, artists, genre)<br>\n    Track duration in milliseconds<br>\n    Audio features (tempo, key, mode, energy etc.)<br>\n\n\nNotes:\n-----\nIf track hasn't been analyzed, initiates analysis and returns processing status."
+      description: 'Get detailed audio analysis for a specific track.
+
+
+        Parameters:
+
+        ----------
+
+        track_id : str (Spotify track ID)
+
+
+        x_api_key : str (API key for authentication)
+
+
+        Returns:
+
+        -------
+
+        TrackAnalysis
+
+
+        Basic track info (name, artists, genre)
+
+
+        Track duration in milliseconds
+
+
+        Audio features (tempo, key, mode, energy etc.)
+
+
+        Notes:
+
+        -----
+
+        If track hasn''t been analyzed, initiates analysis and returns processing status.'
       operationId: get_track_analysis_api_v1_track__track_id__get
       parameters:
       - name: track_id
@@ -47,7 +80,37 @@ paths:
   /api/v1/track/{track_id}/status:
     get:
       summary: Track Status Updates
-      description: "Get real-time status updates for track analysis via Server-Sent Events (SSE).\n\nParameters:\n----------\n<b>track_id</b> : str (Spotify track ID)<br>\n<b>x_api_key</b> : str (API key for authentication)<br>\n\nReturns:\n-------\nEventSourceResponse<br>\n    Status updates as SSE events<br>\n    Event types: status, complete, error<br>\n\nNotes:\n-----\nMaintains an active connection until analysis is complete or fails."
+      description: 'Get real-time status updates for track analysis via Server-Sent Events (SSE).
+
+
+        Parameters:
+
+        ----------
+
+        track_id : str (Spotify track ID)
+
+
+        x_api_key : str (API key for authentication)
+
+
+        Returns:
+
+        -------
+
+        EventSourceResponse
+
+
+        Status updates as SSE events
+
+
+        Event types: status, complete, error
+
+
+        Notes:
+
+        -----
+
+        Maintains an active connection until analysis is complete or fails.'
       operationId: track_status_updates_api_v1_track__track_id__status_get
       parameters:
       - name: track_id
