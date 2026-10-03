@@ -187,15 +187,32 @@ components:
       - artists
       title: TrackAnalysis
       description: Public track analysis response model
-    HTTPValidationError:
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     AudioFeatures:
       properties:
         tempo:
@@ -266,32 +283,15 @@ components:
       - loudness
       title: AudioFeatures
       description: Public audio features response model
-    ValidationError:
+    HTTPValidationError:
       properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Detail
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: HTTPValidationError
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
