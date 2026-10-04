@@ -141,52 +141,6 @@ paths:
       - Track
 components:
   schemas:
-    TrackAnalysis:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Spotify track ID
-        name:
-          type: string
-          title: Name
-          description: Track name
-        artists:
-          items:
-            type: string
-          type: array
-          title: Artists
-          description: List of artists
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
-          description: Track genre
-        popularity:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Popularity
-          description: Popularity score (0-100)
-        duration_ms:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Duration Ms
-          description: Track duration in milliseconds
-        features:
-          anyOf:
-          - $ref: '#/components/schemas/AudioFeatures'
-          - type: 'null'
-          description: Audio features analysis
-      type: object
-      required:
-      - id
-      - name
-      - artists
-      title: TrackAnalysis
-      description: Public track analysis response model
     ValidationError:
       properties:
         loc:
@@ -213,6 +167,15 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     AudioFeatures:
       properties:
         tempo:
@@ -283,15 +246,52 @@ components:
       - loudness
       title: AudioFeatures
       description: Public audio features response model
-    HTTPValidationError:
+    TrackAnalysis:
       properties:
-        detail:
+        id:
+          type: string
+          title: Id
+          description: Spotify track ID
+        name:
+          type: string
+          title: Name
+          description: Track name
+        artists:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            type: string
           type: array
-          title: Detail
+          title: Artists
+          description: List of artists
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Track genre
+        popularity:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Popularity
+          description: Popularity score (0-100)
+        duration_ms:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Ms
+          description: Track duration in milliseconds
+        features:
+          anyOf:
+          - $ref: '#/components/schemas/AudioFeatures'
+          - type: 'null'
+          description: Audio features analysis
       type: object
-      title: HTTPValidationError
+      required:
+      - id
+      - name
+      - artists
+      title: TrackAnalysis
+      description: Public track analysis response model
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
