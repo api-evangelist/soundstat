@@ -764,32 +764,113 @@ paths:
       - Recommendations
 components:
   schemas:
-    TrackIDList:
+    ValidationError:
       properties:
-        track_ids:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ContrastParams:
+      properties:
+        track_id:
+          type: string
+          title: Track Id
+          description: Reference track ID
+        contrast_features:
           items:
             type: string
           type: array
-          title: Track Ids
+          title: Contrast Features
+          description: Features to contrast
+          default:
+          - energy
+          - valence
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
       type: object
       required:
-      - track_ids
-      title: TrackIDList
-    HiddenGemsParams:
+      - track_id
+      title: ContrastParams
+    HTTPValidationError:
       properties:
-        similar_to_track_id:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    MixedRecommendationParams:
+      properties:
+        seed_tracks:
+          items:
+            type: string
+          type: array
+          maxItems: 5
+          minItems: 1
+          title: Seed Tracks
+        target_features:
           anyOf:
-          - type: string
+          - $ref: '#/components/schemas/TargetFeatures'
           - type: 'null'
-          title: Similar To Track Id
-          description: Optional reference track
-        max_popularity:
+        limit:
           type: integer
-          maximum: 70.0
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          default: 20
+      type: object
+      required:
+      - seed_tracks
+      title: MixedRecommendationParams
+    BeatStructureParams:
+      properties:
+        min_regularity:
+          type: number
+          maximum: 1.0
           minimum: 0.0
-          title: Max Popularity
-          description: Maximum popularity score (0-100)
-          default: 40
+          title: Min Regularity
+          description: Minimum beat regularity (0-1)
+          default: 0.7
+        tempo_min:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Tempo Min
+          description: Minimum tempo (BPM)
+        tempo_max:
+          anyOf:
+          - type: number
+            maximum: 300.0
+          - type: 'null'
+          title: Tempo Max
+          description: Maximum tempo (BPM)
         genre:
           anyOf:
           - type: string
@@ -804,41 +885,34 @@ components:
           description: Number of recommendations
           default: 20
       type: object
-      title: HiddenGemsParams
-    ProgressionParams:
+      title: BeatStructureParams
+    DurationParams:
       properties:
-        parameter:
-          type: string
-          title: Parameter
-          description: Parameter to progress (energy, tempo, danceability, valence)
-        direction:
-          type: string
-          title: Direction
-          description: Progression direction (increase, decrease)
-        steps:
+        min_duration_ms:
           type: integer
-          maximum: 10.0
-          minimum: 2.0
-          title: Steps
-          description: Number of tracks in progression
-          default: 5
-        start_value:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Start Value
-          description: Starting value for parameter (0-1, or BPM for tempo)
+          title: Min Duration Ms
+          description: Minimum track duration in milliseconds
+          default: 30000
+        max_duration_ms:
+          type: integer
+          title: Max Duration Ms
+          description: Maximum track duration in milliseconds
+          default: 600000
         genre:
           anyOf:
           - type: string
           - type: 'null'
           title: Genre
           description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
       type: object
-      required:
-      - parameter
-      - direction
-      title: ProgressionParams
+      title: DurationParams
     TargetFeatures:
       properties:
         tempo:
@@ -904,124 +978,6 @@ components:
           default: 20
       type: object
       title: TargetFeatures
-    TimeOfDayParams:
-      properties:
-        time:
-          type: string
-          title: Time
-          description: 'Time of day: morning, afternoon, evening, night'
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
-          description: Optional genre filter
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      required:
-      - time
-      title: TimeOfDayParams
-    BeatStructureParams:
-      properties:
-        min_regularity:
-          type: number
-          maximum: 1.0
-          minimum: 0.0
-          title: Min Regularity
-          description: Minimum beat regularity (0-1)
-          default: 0.7
-        tempo_min:
-          anyOf:
-          - type: number
-            minimum: 0.0
-          - type: 'null'
-          title: Tempo Min
-          description: Minimum tempo (BPM)
-        tempo_max:
-          anyOf:
-          - type: number
-            maximum: 300.0
-          - type: 'null'
-          title: Tempo Max
-          description: Maximum tempo (BPM)
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
-          description: Optional genre filter
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      title: BeatStructureParams
-    InstrumentalParams:
-      properties:
-        min_instrumentalness:
-          type: number
-          maximum: 1.0
-          minimum: 0.0
-          title: Min Instrumentalness
-          description: Minimum instrumentalness score
-          default: 0.5
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
-          description: Optional genre filter
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      title: InstrumentalParams
-    AcousticParams:
-      properties:
-        min_acousticness:
-          type: number
-          maximum: 1.0
-          minimum: 0.0
-          title: Min Acousticness
-          description: Minimum acousticness score
-          default: 0.5
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
-          description: Optional genre filter
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      title: AcousticParams
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     MoodParams:
       properties:
         mood:
@@ -1045,132 +1001,6 @@ components:
       required:
       - mood
       title: MoodParams
-    CrossGenreParams:
-      properties:
-        track_id:
-          type: string
-          title: Track Id
-          description: Reference track ID
-        exclude_genres:
-          items:
-            type: string
-          type: array
-          title: Exclude Genres
-          description: Genres to exclude
-          default: []
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      required:
-      - track_id
-      title: CrossGenreParams
-    DurationParams:
-      properties:
-        min_duration_ms:
-          type: integer
-          title: Min Duration Ms
-          description: Minimum track duration in milliseconds
-          default: 30000
-        max_duration_ms:
-          type: integer
-          title: Max Duration Ms
-          description: Maximum track duration in milliseconds
-          default: 600000
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
-          description: Optional genre filter
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      title: DurationParams
-    ContrastParams:
-      properties:
-        track_id:
-          type: string
-          title: Track Id
-          description: Reference track ID
-        contrast_features:
-          items:
-            type: string
-          type: array
-          title: Contrast Features
-          description: Features to contrast
-          default:
-          - energy
-          - valence
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      required:
-      - track_id
-      title: ContrastParams
-    ActivityParams:
-      properties:
-        activity:
-          type: string
-          title: Activity
-          description: 'Activity type: workout, study, sleep, party, focus'
-        genre:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Genre
-          description: Optional genre filter
-        limit:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Limit
-          description: Number of recommendations
-          default: 20
-      type: object
-      required:
-      - activity
-      title: ActivityParams
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     CompatibleParams:
       properties:
         track_id:
@@ -1201,29 +1031,199 @@ components:
       required:
       - track_id
       title: CompatibleParams
-    MixedRecommendationParams:
+    AcousticParams:
       properties:
-        seed_tracks:
-          items:
-            type: string
-          type: array
-          maxItems: 5
-          minItems: 1
-          title: Seed Tracks
-        target_features:
+        min_acousticness:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Min Acousticness
+          description: Minimum acousticness score
+          default: 0.5
+        genre:
           anyOf:
-          - $ref: '#/components/schemas/TargetFeatures'
+          - type: string
           - type: 'null'
+          title: Genre
+          description: Optional genre filter
         limit:
           type: integer
           maximum: 100.0
           minimum: 1.0
           title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      title: AcousticParams
+    InstrumentalParams:
+      properties:
+        min_instrumentalness:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Min Instrumentalness
+          description: Minimum instrumentalness score
+          default: 0.5
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      title: InstrumentalParams
+    TrackIDList:
+      properties:
+        track_ids:
+          items:
+            type: string
+          type: array
+          title: Track Ids
+      type: object
+      required:
+      - track_ids
+      title: TrackIDList
+    TimeOfDayParams:
+      properties:
+        time:
+          type: string
+          title: Time
+          description: 'Time of day: morning, afternoon, evening, night'
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
           default: 20
       type: object
       required:
-      - seed_tracks
-      title: MixedRecommendationParams
+      - time
+      title: TimeOfDayParams
+    ActivityParams:
+      properties:
+        activity:
+          type: string
+          title: Activity
+          description: 'Activity type: workout, study, sleep, party, focus'
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      required:
+      - activity
+      title: ActivityParams
+    ProgressionParams:
+      properties:
+        parameter:
+          type: string
+          title: Parameter
+          description: Parameter to progress (energy, tempo, danceability, valence)
+        direction:
+          type: string
+          title: Direction
+          description: Progression direction (increase, decrease)
+        steps:
+          type: integer
+          maximum: 10.0
+          minimum: 2.0
+          title: Steps
+          description: Number of tracks in progression
+          default: 5
+        start_value:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Start Value
+          description: Starting value for parameter (0-1, or BPM for tempo)
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+      type: object
+      required:
+      - parameter
+      - direction
+      title: ProgressionParams
+    HiddenGemsParams:
+      properties:
+        similar_to_track_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Similar To Track Id
+          description: Optional reference track
+        max_popularity:
+          type: integer
+          maximum: 70.0
+          minimum: 0.0
+          title: Max Popularity
+          description: Maximum popularity score (0-100)
+          default: 40
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+          description: Optional genre filter
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      title: HiddenGemsParams
+    CrossGenreParams:
+      properties:
+        track_id:
+          type: string
+          title: Track Id
+          description: Reference track ID
+        exclude_genres:
+          items:
+            type: string
+          type: array
+          title: Exclude Genres
+          description: Genres to exclude
+          default: []
+        limit:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Limit
+          description: Number of recommendations
+          default: 20
+      type: object
+      required:
+      - track_id
+      title: CrossGenreParams
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
