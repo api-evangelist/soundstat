@@ -1,4 +1,4 @@
-# SoundStat (soundstat)
+# SoundStat
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,103 +64,126 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-SoundStat is an independent audio analysis API that returns detailed per-track features - tempo (BPM), key, mode, energy, danceability, valence, instrumentalness, acousticness, loudness, plus segment and beat structure - for music tracks referenced by Spotify track ID. Launched in early 2025 as an alternative after Spotify deprecated its public audio-features and recommendations endpoints, SoundStat has analyzed several million tracks and layers a rich recommendation engine (similar, feature-target, mixed-seed, mood, activity, time-of-day, cross-genre, DJ-compatible, contrast, hidden-gems, and more) plus genre-and-feature search on top of its analysis corpus. The REST API is authenticated with an `x-api-key` header and billed per unique track analyzed.
+SoundStat is an independent audio analysis API that returns detailed per-track features - tempo (BPM), key, mode, energy, danceability, valence, instrumentalness, acousticness, loudness, plus segment and beat structure - for music tracks referenced by Spotify track ID. Launched in early 2025 as an alternative after Spotify deprecated its public audio-features and recommendations endpoints, SoundStat has analyzed several million tracks and layers a rich recommendation engine (similar, feature-target, mixed-seed, mood, activity, time-of-day, cross-genre, DJ-compatible, contrast, hidden-gems, and more) plus genre-and-feature search on top of its analysis corpus. The REST API is authenticated with an x-api-key header and billed per unique track analyzed.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/soundstat/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/soundstat/refs/heads/main/apis.yml)
+**Areas:** Music · Audio Analysis · Audio Features · Recommendations · Track Analysis · Spotify Alternative
 
-## Tags
+## SoundStat on APIs.io
 
-- Music
-- Audio Analysis
-- Audio Features
-- Recommendations
-- Track Analysis
-- Spotify Alternative
+Everything profiled for SoundStat is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/soundstat/](https://apis.io/providers/soundstat/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (5)
 
-- **Created:** 2026-07-03
-- **Modified:** 2026-07-03
+- [SoundStat Genres API](https://apis.io/apis/soundstat/soundstat-genres-api/) — The Genres API from SoundStat — 1 operation(s) for genres.
+- [SoundStat Recommendations API](https://apis.io/apis/soundstat/soundstat-recommendations-api/) — The Recommendations API from SoundStat — 15 operation(s) for recommendations.
+- [SoundStat Stats API](https://apis.io/apis/soundstat/soundstat-stats-api/) — The Stats API from SoundStat — 1 operation(s) for stats.
+- [SoundStat Track API](https://apis.io/apis/soundstat/soundstat-track-api/) — The Track API from SoundStat — 2 operation(s) for track.
+- [SoundStat Tracks API](https://apis.io/apis/soundstat/soundstat-tracks-api/) — The Tracks API from SoundStat — 1 operation(s) for tracks.
 
-## APIs
+### Published properties
 
-### SoundStat Track Analysis API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Retrieve the full audio analysis for a track by its Spotify track ID - tempo, key, mode, key confidence, energy, danceability, valence, instrumentalness, acousticness, loudness, and segment/beat structure - alongside track metadata (name, artists, genre, popularity, duration). Includes a per-track analysis status endpoint (Server-Sent Events over HTTP) for tracks still being processed.
+#### Agentic access (1)
 
-- **Human URL:** [https://soundstat.info/api/v1/docs](https://soundstat.info/api/v1/docs)
-- **Base URL:** `https://soundstat.info/api/v1`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Soundstat Agentic Access](https://apis.io/agentic-access/soundstat/soundstat-agentic-access/)
 
-- Track Analysis
-- Audio Features
-- Tempo
-- Key
+#### Collections (6)
 
-#### Properties
+Postman and Open Collection request collections.
 
-- [Documentation](https://soundstat.info/api/v1/docs)
-- [API Reference](https://soundstat.info/api/v1/docs)
-- [OpenAPI](openapi/soundstat-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/soundstat.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/soundstat.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [SoundStat API](https://apis.io/collections/soundstat/open-soundstat/)
+- [SoundStat Genres API](https://apis.io/collections/soundstat/open-soundstat-genres-api/)
+- [SoundStat Genres Recommendations API](https://apis.io/collections/soundstat/open-soundstat-recommendations-api/)
+- [SoundStat Genres Stats API](https://apis.io/collections/soundstat/open-soundstat-stats-api/)
+- [SoundStat Genres Track API](https://apis.io/collections/soundstat/open-soundstat-track-api/)
+- [SoundStat Genres Tracks API](https://apis.io/collections/soundstat/open-soundstat-tracks-api/)
 
-### SoundStat Search & Discovery API
+#### Security (2)
 
-Search the analyzed track corpus by genre with pagination, filter on audio-feature ranges (tempo, energy, danceability, valence, instrumentalness, acousticness, popularity, key, mode), list the available genres, and read corpus-wide analysis statistics such as the total number of tracks analyzed.
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://soundstat.info/api/v1/docs](https://soundstat.info/api/v1/docs)
-- **Base URL:** `https://soundstat.info/api/v1`
+- [Soundstat Authentication](https://apis.io/security/soundstat/soundstat-authentication/)
+- [Soundstat Domain Security](https://apis.io/security/soundstat/soundstat-domain-security/)
 
-#### Tags
+#### Plans and pricing (1)
 
-- Search
-- Discovery
-- Genres
-- Statistics
+Published plans, tiers and prices.
 
-#### Properties
+- [Soundstat Plans Pricing](https://apis.io/plans/soundstat/soundstat-plans-pricing/)
 
-- [Documentation](https://soundstat.info/api/v1/docs)
-- [API Reference](https://soundstat.info/api/v1/docs)
-- [OpenAPI](openapi/soundstat-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/soundstat.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/soundstat.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Rate limits (1)
 
-### SoundStat Recommendations API
+Published request limits.
 
-A recommendation engine built on the analysis corpus, exposing fifteen strategies - similar tracks, feature-target, mixed multi-seed, harmonic progression, DJ-compatible, contrast, cross-genre, time-of-day, hidden gems, beat-structure, duration, mood, activity, instrumental, and acoustic - each returning ranked tracks with a genre filter and result limit. The similar, feature-target, and mixed endpoints are documented as free to call.
+- [Soundstat Rate Limits](https://apis.io/rate-limits/soundstat/soundstat-rate-limits/)
 
-- **Human URL:** [https://soundstat.info/api/v1/docs](https://soundstat.info/api/v1/docs)
-- **Base URL:** `https://soundstat.info/api/v1`
+#### FinOps (1)
 
-#### Tags
+What the API costs to run, by operation.
 
-- Recommendations
-- Similarity
-- Mood
-- Playlisting
+- [Soundstat Finops](https://apis.io/finops/soundstat/soundstat-finops/)
 
-#### Properties
+## Where to find this API
 
-- [Documentation](https://soundstat.info/article/New-Horizons-in-Music-Recommendations.html)
-- [API Reference](https://soundstat.info/api/v1/docs)
-- [OpenAPI](openapi/soundstat-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/soundstat.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/soundstat.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://soundstat.info)
 - [Documentation](https://soundstat.info/api/v1/docs)
-- [Sign Up](https://soundstat.info/auth.html)
-- [Terms of Service](https://soundstat.info/terms.html)
-- [Plans](plans/soundstat-plans-pricing.yml)
-- [Rate Limits](rate-limits/soundstat-rate-limits.yml)
-- [Fin Ops](finops/soundstat-finops.yml)
+- [Sign up](https://soundstat.info/auth.html)
+- [Terms of service](https://soundstat.info/terms.html)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 31.6** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 49.3 |
+| Contract governance | 0.0 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 29.8 |
+| Access clarity | 31.6 |
+
+**Agent readiness 23.7** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 15.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/soundstat/](https://apis.io/providers/soundstat/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for SoundStat: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/soundstat/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
